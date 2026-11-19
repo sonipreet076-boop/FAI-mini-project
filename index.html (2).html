@@ -1,0 +1,3487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CYBERVAULT — Secure. Explore. Understand.</title>
+  <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN SYSTEM & CSS CUSTOM PROPERTIES
+       ========================================================================== */
+    :root {
+      --bg-primary: #08070D;
+      --bg-secondary: #100B19;
+      --bg-card: #151020;
+      --bg-elevated: #1C1529;
+      --purple-primary: #A855F7;
+      --violet-electric: #8B5CF6;
+      --lavender-neon: #C4B5FD;
+      --blue-secondary: #6366F1;
+      --text-primary: #FFFFFF;
+      --text-secondary: #A1A1AA;
+      --text-muted: #71717A;
+      --success: #22C55E;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --border-purple: rgba(168, 85, 247, 0.18);
+      --border-purple-strong: rgba(168, 85, 247, 0.45);
+      --gradient-primary: linear-gradient(135deg, #8B5CF6, #A855F7, #C084FC);
+      --gradient-bg: linear-gradient(135deg, #08070D, #130D20, #090714);
+      --glow-purple: 0 0 30px rgba(168, 85, 247, 0.25);
+      --glow-purple-strong: 0 0 40px rgba(168, 85, 247, 0.4);
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-med: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      --nav-height: 76px;
+    }
+
+    /* ==========================================================================
+       2. RESET, SCROLLBARS & BASE TYPOGRAPHY
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--gradient-bg);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Subtle cyber grid ambient overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.12) 0%, transparent 42%),
+        radial-gradient(circle at 85% 75%, rgba(99, 102, 241, 0.09) 0%, transparent 45%),
+        linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(168, 85, 247, 0.3);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(168, 85, 247, 0.6);
+    }
+
+    h1, h2, h3, h4, .font-heading {
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .font-mono {
+      font-family: var(--font-mono);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, select {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    /* Responsive Typography Hierarchy */
+    .hero-title {
+      font-size: clamp(2.5rem, 5.2vw, 4.75rem);
+      font-weight: 700;
+      line-height: 1.08;
+    }
+
+    .section-title {
+      font-size: clamp(1.85rem, 3.4vw, 2.85rem);
+      font-weight: 700;
+    }
+
+    .card-title {
+      font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+      font-weight: 600;
+    }
+
+    .tech-label {
+      font-family: var(--font-mono);
+      font-size: clamp(0.68rem, 0.85vw, 0.8rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ==========================================================================
+       3. LAYOUT UTILITIES & REUSABLE GLASSMORPHISM COMPONENTS
+       ========================================================================== */
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 3vw, 2rem);
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-view {
+      display: none;
+      padding-top: calc(var(--nav-height) + 1.5rem);
+      padding-bottom: 5rem;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      animation: pageFadeIn 0.35s ease forwards;
+    }
+
+    .page-view.active {
+      display: block;
+    }
+
+    @keyframes pageFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: rgba(21, 16, 32, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-lg);
+      transition: transform var(--transition-med), border-color var(--transition-med), box-shadow var(--transition-med), background var(--transition-med);
+    }
+
+    .glass-card-hover:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-purple-strong);
+      box-shadow: var(--glow-purple);
+      background: rgba(28, 21, 41, 0.88);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.75rem 1.45rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all var(--transition-fast);
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(168, 85, 247, 0.55);
+      filter: brightness(1.06);
+    }
+
+    .btn-secondary {
+      background: rgba(28, 21, 41, 0.85);
+      border: 1px solid var(--border-purple-strong);
+      color: var(--lavender-neon);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(168, 85, 247, 0.16);
+      border-color: var(--purple-primary);
+      color: #FFFFFF;
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border-purple);
+      color: var(--text-secondary);
+      padding: 0.55rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--purple-primary);
+      color: var(--text-primary);
+      background: rgba(168, 85, 247, 0.1);
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.82rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Badges & Status Pills */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border: 1px solid transparent;
+    }
+
+    .badge-purple {
+      background: rgba(168, 85, 247, 0.14);
+      color: var(--lavender-neon);
+      border-color: rgba(168, 85, 247, 0.32);
+    }
+
+    .badge-high {
+      background: rgba(239, 68, 68, 0.14);
+      color: #FCA5A5;
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .badge-medium {
+      background: rgba(245, 158, 11, 0.14);
+      color: #FCD34D;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .badge-low {
+      background: rgba(34, 197, 94, 0.14);
+      color: #86EFAC;
+      border-color: rgba(34, 197, 94, 0.35);
+    }
+
+    .sim-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius-sm);
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #C7D2FE;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--purple-primary);
+      box-shadow: 0 0 10px var(--purple-primary);
+      animation: pulseDot 2s infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.45); opacity: 0.55; }
+    }
+
+    /* Animated Gradient Text */
+    .gradient-text-animated {
+      background: linear-gradient(90deg, #8B5CF6, #C084FC, #6366F1, #A855F7);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientFlow 5s linear infinite;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% center; }
+      100% { background-position: 250% center; }
+    }
+
+    /* Form Controls */
+    .cyber-input {
+      width: 100%;
+      background: rgba(16, 11, 25, 0.9);
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 0.78rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      outline: none;
+    }
+
+    .cyber-input:focus {
+      border-color: var(--purple-primary);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.18);
+    }
+
+    .cyber-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       4. STICKY FLOATING GLASSMORPHISM NAVBAR
+       ========================================================================== */
+    .navbar {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 2rem);
+      max-width: 1320px;
+      height: 64px;
+      background: rgba(16, 11, 25, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-purple);
+      border-radius: 18px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.55);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+      color: #FFFFFF;
+    }
+
+    .brand-logo span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      padding: 0.48rem 0.82rem;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: #FFFFFF;
+      background: rgba(168, 85, 247, 0.1);
+    }
+
+    .nav-link.active {
+      color: #FFFFFF;
+      background: rgba(168, 85, 247, 0.18);
+      box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.35);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(28, 21, 41, 0.85);
+      border: 1px solid var(--border-purple);
+      color: var(--lavender-neon);
+      transition: all var(--transition-fast);
+    }
+
+    .icon-btn:hover {
+      border-color: var(--purple-primary);
+      color: #FFFFFF;
+      box-shadow: var(--glow-purple);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 7, 13, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 1100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-med);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .mobile-drawer.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-drawer-panel {
+      width: min(320px, 85vw);
+      height: 100%;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border-purple);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transform: translateX(100%);
+      transition: transform var(--transition-med);
+    }
+
+    .mobile-drawer.open .mobile-drawer-panel {
+      transform: translateX(0);
+    }
+
+    .mobile-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      list-style: none;
+    }
+
+    .mobile-nav-list .nav-link {
+      display: block;
+      padding: 0.75rem 1rem;
+      font-size: 0.98rem;
+    }
+
+    /* ==========================================================================
+       5. HOME / LANDING PAGE STYLES
+       ========================================================================== */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 3rem;
+      align-items: center;
+      padding: 2.5rem 0 4rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      color: var(--lavender-neon);
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-desc {
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 1.4rem 0 2rem;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.25rem;
+    }
+
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-purple);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .trust-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Hero Futuristic Shield Visual */
+    .hero-visual-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 430px;
+    }
+
+    .hero-radar-glow {
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.28) 0%, rgba(99, 102, 241, 0.08) 50%, transparent 72%);
+      filter: blur(18px);
+      animation: shieldBreathe 4.5s ease-in-out infinite;
+    }
+
+    @keyframes shieldBreathe {
+      0%, 100% { transform: scale(0.95); opacity: 0.85; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .spin-slow {
+      transform-origin: 220px 220px;
+      animation: spinClockwise 26s linear infinite;
+    }
+
+    .spin-reverse {
+      transform-origin: 220px 220px;
+      animation: spinCounter 18s linear infinite;
+    }
+
+    @keyframes spinClockwise {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spinCounter {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    .floating-status-card {
+      position: absolute;
+      background: rgba(21, 16, 32, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 12px;
+      padding: 0.65rem 0.9rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      animation: floatCard 5s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    .f-card-1 { top: 8%; left: 2%; animation-delay: 0s; }
+    .f-card-2 { bottom: 12%; left: 0%; animation-delay: 1.5s; }
+    .f-card-3 { top: 22%; right: 0%; animation-delay: 2.7s; }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Stats & Featured Grids */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin: 1rem 0 4.5rem;
+    }
+
+    .stat-card {
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: clamp(1.9rem, 3vw, 2.5rem);
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .featured-card {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .feature-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(168, 85, 247, 0.14);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--lavender-neon);
+      margin-bottom: 1.1rem;
+    }
+
+    /* ==========================================================================
+       6. DASHBOARD COMMAND CENTER STYLES
+       ========================================================================== */
+    .dashboard-shell {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      transition: grid-template-columns var(--transition-med);
+    }
+
+    .dashboard-shell.sidebar-collapsed {
+      grid-template-columns: 76px 1fr;
+    }
+
+    .dash-sidebar {
+      position: sticky;
+      top: calc(var(--nav-height) + 1rem);
+      padding: 1.15rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .dash-sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0.5rem 0.85rem;
+      border-bottom: 1px solid var(--border-purple);
+      margin-bottom: 0.4rem;
+    }
+
+    .dashboard-shell.sidebar-collapsed .sidebar-label,
+    .dashboard-shell.sidebar-collapsed .dash-sidebar-title {
+      display: none;
+    }
+
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.72rem 0.85rem;
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+      width: 100%;
+      text-align: left;
+    }
+
+    .dash-nav-item:hover {
+      background: rgba(168, 85, 247, 0.1);
+      color: #FFFFFF;
+    }
+
+    .dash-nav-item.active {
+      background: rgba(168, 85, 247, 0.2);
+      color: #FFFFFF;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+    }
+
+    .dash-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.35rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .dash-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.15rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .dash-main-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 1.5rem;
+    }
+
+    /* Bar Chart Visualization */
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      margin-top: 1.25rem;
+    }
+
+    .chart-row-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.86rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .chart-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .chart-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--gradient-primary);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Timeline */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    /* ==========================================================================
+       7. THREAT INTELLIGENCE, LEARNING & NEWS GRIDS
+       ========================================================================== */
+    .filter-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.15rem;
+      margin: 1.75rem 0 2rem;
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-pill {
+      padding: 0.48rem 0.95rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      background: rgba(28, 21, 41, 0.75);
+      border: 1px solid var(--border-purple);
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+    }
+
+    .filter-pill:hover, .filter-pill.active {
+      background: rgba(168, 85, 247, 0.22);
+      border-color: var(--purple-primary);
+      color: #FFFFFF;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+    }
+
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* ==========================================================================
+       8. PHISHING AWARENESS LAB
+       ========================================================================== */
+    .email-simulator-box {
+      max-width: 880px;
+      margin: 2rem auto 0;
+      overflow: hidden;
+    }
+
+    .email-header-bar {
+      background: rgba(28, 21, 41, 0.95);
+      padding: 1.35rem 1.6rem;
+      border-bottom: 1px solid var(--border-purple);
+    }
+
+    .email-meta-grid {
+      display: grid;
+      grid-template-columns: 95px 1fr;
+      gap: 0.45rem 0.75rem;
+      font-size: 0.86rem;
+      margin-top: 0.85rem;
+    }
+
+    .email-body-area {
+      padding: 1.75rem 1.6rem;
+      background: rgba(16, 11, 25, 0.75);
+      font-size: 0.96rem;
+      line-height: 1.7;
+      color: #E4E4E7;
+    }
+
+    .simulated-link-preview {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 1rem;
+      padding: 0.55rem 0.95rem;
+      border-radius: 10px;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px dashed rgba(168, 85, 247, 0.45);
+      color: var(--lavender-neon);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      word-break: break-all;
+    }
+
+    .phishing-feedback-box {
+      margin-top: 1.5rem;
+      padding: 1.4rem;
+      border-radius: var(--radius-md);
+      background: rgba(28, 21, 41, 0.95);
+      border: 1px solid var(--border-purple-strong);
+      animation: pageFadeIn 0.3s ease;
+    }
+
+    /* ==========================================================================
+       9. PASSWORD SECURITY LAB
+       ========================================================================== */
+    .strength-meter-track {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.85rem 0;
+    }
+
+    .strength-meter-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.35s ease, background-color 0.35s ease;
+    }
+
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .criteria-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      background: rgba(16, 11, 25, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+    }
+
+    .criteria-item.met {
+      border-color: rgba(34, 197, 94, 0.35);
+      background: rgba(34, 197, 94, 0.08);
+      color: #DCFCE7;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 12px;
+      background: rgba(16, 11, 25, 0.65);
+      border: 1px solid var(--border-purple);
+      cursor: pointer;
+      transition: border-color var(--transition-fast);
+    }
+
+    .checklist-item:hover {
+      border-color: var(--purple-primary);
+    }
+
+    .checklist-item input[type="checkbox"] {
+      accent-color: var(--purple-primary);
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       10. MODALS, TOASTS & BACK-TO-TOP
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 7, 13, 0.82);
+      backdrop-filter: blur(10px);
+      z-index: 1200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-dialog {
+      width: 100%;
+      max-width: 720px;
+      max-height: 88vh;
+      overflow-y: auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-purple-strong);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), var(--glow-purple);
+      transform: scale(0.96);
+      transition: transform 0.25s ease;
+    }
+
+    .modal-backdrop.open .modal-dialog {
+      transform: scale(1);
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 1400;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: rgba(28, 21, 41, 0.96);
+      border: 1px solid var(--border-purple-strong);
+      border-left: 4px solid var(--purple-primary);
+      color: #FFFFFF;
+      padding: 0.85rem 1.15rem;
+      border-radius: 12px;
+      font-size: 0.86rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      animation: toastSlideIn 0.3s ease forwards;
+      pointer-events: auto;
+      max-width: 340px;
+    }
+
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateX(25px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(28, 21, 41, 0.9);
+      border: 1px solid var(--border-purple-strong);
+      color: var(--lavender-neon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 950;
+      opacity: 0;
+      pointer-events: none;
+      transition: all var(--transition-fast);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top:hover {
+      background: var(--purple-primary);
+      color: #FFFFFF;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid var(--border-purple);
+      background: rgba(16, 11, 25, 0.85);
+      padding: 3rem 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ==========================================================================
+       11. RESPONSIVE BREAKPOINTS (1024px, 768px, 430px, 375px)
+       ========================================================================== */
+    @media (max-width: 1100px) {
+      .nav-links { display: none; }
+      .mobile-menu-btn { display: inline-flex; }
+      .hero-grid { grid-template-columns: 1fr; text-align: left; gap: 2.5rem; }
+      .dashboard-shell, .dashboard-shell.sidebar-collapsed { grid-template-columns: 1fr; }
+      .dash-sidebar { position: static; flex-direction: row; overflow-x: auto; padding: 0.75rem; }
+      .dash-sidebar-header { display: none; }
+      .dash-nav-item { width: auto; white-space: nowrap; }
+      .dash-main-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid, .dash-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-grid, .cards-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .stats-grid, .dash-metrics-grid, .featured-grid, .cards-grid-3, .cards-grid-2, .criteria-grid {
+        grid-template-columns: 1fr;
+      }
+      .navbar { width: calc(100% - 1rem); padding: 0 0.85rem; }
+      .nav-cta-desktop { display: none; }
+      .hero-visual-wrapper { min-height: 340px; }
+      .floating-status-card { font-size: 0.65rem; padding: 0.5rem 0.7rem; }
+      .email-meta-grid { grid-template-columns: 1fr; gap: 0.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       FLOATING STICKY GLASSMORPHISM NAVBAR
+       ======================================================================== -->
+  <header class="navbar" role="banner">
+    <a href="#home" class="brand-logo" aria-label="CyberVault Home">
+      <svg width="32" height="32" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="cvLogoGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#8B5CF6" />
+            <stop offset="50%" stop-color="#A855F7" />
+            <stop offset="100%" stop-color="#C084FC" />
+          </linearGradient>
+        </defs>
+        <path d="M18 3L5 8.5V17.5C5 25.6 10.55 32.95 18 35C25.45 32.95 31 25.6 31 17.5V8.5L18 3Z" stroke="url(#cvLogoGrad)" stroke-width="2.4" fill="rgba(168,85,247,0.14)" />
+        <path d="M18 10V26M12 15L18 19L24 15" stroke="#C4B5FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="18" cy="10" r="2" fill="#A855F7" />
+      </svg>
+      <div>CYBER<span>VAULT</span></div>
+    </a>
+
+    <nav aria-label="Primary Navigation">
+      <ul class="nav-links" id="desktopNavLinks">
+        <li><a href="#home" class="nav-link" data-route="home">Home</a></li>
+        <li><a href="#dashboard" class="nav-link" data-route="dashboard">Dashboard</a></li>
+        <li><a href="#threats" class="nav-link" data-route="threats">Threats</a></li>
+        <li><a href="#phishing" class="nav-link" data-route="phishing">Phishing Lab</a></li>
+        <li><a href="#password" class="nav-link" data-route="password">Password Lab</a></li>
+        <li><a href="#learning" class="nav-link" data-route="learning">Learn</a></li>
+        <li><a href="#news" class="nav-link" data-route="news">News</a></li>
+        <li><a href="#about" class="nav-link" data-route="about">About</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="openGlobalSearchBtn" aria-label="Quick Search" title="Quick Search (Ctrl+K)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <a href="#dashboard" class="btn btn-primary btn-sm nav-cta-desktop">Get Started</a>
+      <button class="icon-btn mobile-menu-btn" id="openMobileMenuBtn" aria-label="Open Navigation Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="mobile-drawer-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="font-heading" style="font-weight:700;letter-spacing:0.06em;">CYBERVAULT</span>
+        <button class="icon-btn" id="closeMobileMenuBtn" aria-label="Close Menu">✕</button>
+      </div>
+      <ul class="mobile-nav-list">
+        <li><a href="#home" class="nav-link" data-route="home">Home</a></li>
+        <li><a href="#dashboard" class="nav-link" data-route="dashboard">Dashboard</a></li>
+        <li><a href="#threats" class="nav-link" data-route="threats">Threat Intelligence</a></li>
+        <li><a href="#phishing" class="nav-link" data-route="phishing">Phishing Awareness Lab</a></li>
+        <li><a href="#password" class="nav-link" data-route="password">Password Security Lab</a></li>
+        <li><a href="#learning" class="nav-link" data-route="learning">Cyber Learning Center</a></li>
+        <li><a href="#news" class="nav-link" data-route="news">Cyber News & Insights</a></li>
+        <li><a href="#about" class="nav-link" data-route="about">About CyberVault</a></li>
+      </ul>
+      <div style="margin-top:auto;">
+        <div class="sim-banner" style="width:100%;justify-content:center;">
+          Educational Simulation Platform
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       PAGE 1: HOME / LANDING PAGE (#home)
+       ======================================================================== -->
+  <main id="page-home" class="page-view active">
+    <div class="container">
+      <!-- Hero Section -->
+      <section class="hero-grid">
+        <div>
+          <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            <span class="tech-label">[ CYBERSECURITY INTELLIGENCE PLATFORM ]</span>
+          </div>
+          <h1 class="hero-title">
+            Your Digital World.<br />
+            Your <span class="gradient-text-animated">Security.</span><br />
+            Our Priority.
+          </h1>
+          <p class="hero-desc">
+            Explore the world of cybersecurity, understand digital threats, strengthen your online safety, and stay one step ahead in an evolving digital world through interactive simulations and structured learning.
+          </p>
+          <div class="hero-ctas">
+            <a href="#dashboard" class="btn btn-primary">
+              <span>Explore Dashboard</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#threats" class="btn btn-secondary">
+              <span>Explore Cyber Threats</span>
+            </a>
+          </div>
+          <div class="trust-row">
+            <span class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Learn Cybersecurity
+            </span>
+            <span class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Explore Threats
+            </span>
+            <span class="trust-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Improve Digital Safety
+            </span>
+          </div>
+        </div>
+
+        <!-- Futuristic SVG + CSS Cybersecurity Shield Visual -->
+        <div class="hero-visual-wrapper" aria-hidden="true">
+          <div class="hero-radar-glow"></div>
+
+          <!-- Floating Status Cards -->
+          <div class="floating-status-card f-card-1">
+            <span class="pulse-dot" style="background:#22C55E;box-shadow:0 0 8px #22C55E;"></span>
+            <div>
+              <div style="color:#A1A1AA;font-size:0.65rem;">ENCRYPTION</div>
+              <div style="color:#FFFFFF;font-weight:600;">AES-256 SIMULATED</div>
+            </div>
+          </div>
+
+          <div class="floating-status-card f-card-2">
+            <span class="pulse-dot"></span>
+            <div>
+              <div style="color:#A1A1AA;font-size:0.65rem;">PROTECTION</div>
+              <div style="color:#C4B5FD;font-weight:600;">DEFENSE LAB ACTIVE</div>
+            </div>
+          </div>
+
+          <div class="floating-status-card f-card-3">
+            <span class="pulse-dot" style="background:#6366F1;box-shadow:0 0 8px #6366F1;"></span>
+            <div>
+              <div style="color:#A1A1AA;font-size:0.65rem;">THREAT INTEL</div>
+              <div style="color:#FFFFFF;font-weight:600;">EDUCATIONAL MODE</div>
+            </div>
+          </div>
+
+          <!-- Custom Futuristic Radar & Shield SVG -->
+          <svg width="100%" height="100%" viewBox="0 0 440 440" style="max-width:440px;position:relative;z-index:1;">
+            <defs>
+              <linearGradient id="shieldCore" x1="120" y1="90" x2="320" y2="350" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.35" />
+                <stop offset="50%" stop-color="#A855F7" stop-opacity="0.18" />
+                <stop offset="100%" stop-color="#6366F1" stop-opacity="0.35" />
+              </linearGradient>
+              <linearGradient id="shieldStroke" x1="120" y1="90" x2="320" y2="350" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#C4B5FD" />
+                <stop offset="50%" stop-color="#A855F7" />
+                <stop offset="100%" stop-color="#6366F1" />
+              </linearGradient>
+            </defs>
+
+            <!-- Outer Rotating Dashed Rings -->
+            <g class="spin-slow">
+              <circle cx="220" cy="220" r="190" stroke="rgba(168,85,247,0.22)" stroke-width="1.2" stroke-dasharray="8 10" fill="none" />
+              <circle cx="220" cy="30" r="4" fill="#A855F7" />
+              <circle cx="220" cy="410" r="4" fill="#6366F1" />
+            </g>
+
+            <g class="spin-reverse">
+              <circle cx="220" cy="220" r="154" stroke="rgba(196,181,253,0.25)" stroke-width="1.5" stroke-dasharray="28 14 4 14" fill="none" />
+              <circle cx="66" cy="220" r="3.5" fill="#C4B5FD" />
+              <circle cx="374" cy="220" r="3.5" fill="#A855F7" />
+            </g>
+
+            <!-- Digital Network Connections -->
+            <g stroke="rgba(168,85,247,0.28)" stroke-width="1">
+              <line x1="70" y1="115" x2="155" y2="155" />
+              <line x1="370" y1="115" x2="285" y2="155" />
+              <line x1="70" y1="325" x2="155" y2="285" />
+              <line x1="370" y1="325" x2="285" y2="285" />
+              <circle cx="70" cy="115" r="4" fill="#8B5CF6" />
+              <circle cx="370" cy="115" r="4" fill="#C084FC" />
+              <circle cx="70" cy="325" r="4" fill="#6366F1" />
+              <circle cx="370" cy="325" r="4" fill="#A855F7" />
+            </g>
+
+            <!-- Central Glowing Cyber Shield -->
+            <path d="M220 96L136 132V208C136 271.5 171.8 329.2 220 348C268.2 329.2 304 271.5 304 208V132L220 96Z"
+                  fill="url(#shieldCore)" stroke="url(#shieldStroke)" stroke-width="2.6" />
+            <path d="M220 118L154 146V207C154 258.5 182.8 305.2 220 321.5C257.2 305.2 286 258.5 286 207V146L220 118Z"
+                  fill="rgba(8,7,13,0.55)" stroke="rgba(196,181,253,0.35)" stroke-width="1.2" />
+
+            <!-- Inner Lock / Keyhole Circuit -->
+            <rect x="196" y="204" width="48" height="38" rx="8" fill="rgba(168,85,247,0.22)" stroke="#C4B5FD" stroke-width="2" />
+            <path d="M206 204V190C206 182.268 212.268 176 220 176C227.732 176 234 182.268 234 190V204" stroke="#C4B5FD" stroke-width="2.2" fill="none" />
+            <circle cx="220" cy="220" r="4" fill="#FFFFFF" />
+            <line x1="220" y1="224" x2="220" y2="232" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+
+            <!-- Technical SVG Labels -->
+            <text x="220" y="75" text-anchor="middle" fill="#C4B5FD" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3">SECURITY</text>
+            <text x="220" y="382" text-anchor="middle" fill="#A1A1AA" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3">ZERO-TRUST EDUCATION</text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Illustrative Platform Statistics -->
+      <section class="reveal" aria-label="Platform Content Overview">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
+          <span class="tech-label" style="color:var(--lavender-neon);">// PLATFORM CURRICULUM METRICS</span>
+          <span class="sim-banner">Illustrative educational platform content counts</span>
+        </div>
+        <div class="stats-grid">
+          <div class="glass-card glass-card-hover stat-card">
+            <div class="stat-value">25+</div>
+            <div style="font-weight:600;margin-bottom:0.2rem;">Cybersecurity Topics</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);">Structured concepts across defense & privacy</div>
+          </div>
+          <div class="glass-card glass-card-hover stat-card">
+            <div class="stat-value">12+</div>
+            <div style="font-weight:600;margin-bottom:0.2rem;">Learning Modules & Labs</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);">Interactive lessons, quizzes & simulations</div>
+          </div>
+          <div class="glass-card glass-card-hover stat-card">
+            <div class="stat-value">40+</div>
+            <div style="font-weight:600;margin-bottom:0.2rem;">Security Concepts</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);">Actionable defensive safeguards & checklists</div>
+          </div>
+          <div class="glass-card glass-card-hover stat-card">
+            <div class="stat-value">15+</div>
+            <div style="font-weight:600;margin-bottom:0.2rem;">Awareness Resources</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);">Threat profiles, phishing samples & insights</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Interactive Modules -->
+      <section class="reveal" style="margin-top:2rem;">
+        <div style="text-align:center;max-width:680px;margin:0 auto;">
+          <span class="tech-label" style="color:var(--purple-primary);">[ CORE CAPABILITIES ]</span>
+          <h2 class="section-title" style="margin-top:0.5rem;">Interactive Security Labs</h2>
+          <p style="color:var(--text-secondary);margin-top:0.75rem;">
+            Build practical digital resilience through hands-on frontend simulations designed for clarity and real-world awareness.
+          </p>
+        </div>
+
+        <div class="featured-grid">
+          <!-- Feature 1 -->
+          <article class="glass-card glass-card-hover featured-card">
+            <div>
+              <div class="feature-icon-box">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <h3 class="card-title">Explore Threat Intelligence</h3>
+              <p style="color:var(--text-secondary);font-size:0.92rem;margin-top:0.65rem;">
+                Inspect 8 core digital threat categories—from ransomware to social engineering—with clear warning signs and defensive countermeasures.
+              </p>
+            </div>
+            <a href="#threats" class="btn btn-secondary btn-sm" style="align-self:flex-start;">
+              Open Threat Explorer →
+            </a>
+          </article>
+
+          <!-- Feature 2 -->
+          <article class="glass-card glass-card-hover featured-card">
+            <div>
+              <div class="feature-icon-box">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <h3 class="card-title">Learn About Phishing</h3>
+              <p style="color:var(--text-secondary);font-size:0.92rem;margin-top:0.65rem;">
+                Analyze simulated inbox scenarios, inspect sender domains and spoofed links, and train your eye to detect social engineering cues.
+              </p>
+            </div>
+            <a href="#phishing" class="btn btn-secondary btn-sm" style="align-self:flex-start;">
+              Launch Phishing Lab →
+            </a>
+          </article>
+
+          <!-- Feature 3 -->
+          <article class="glass-card glass-card-hover featured-card">
+            <div>
+              <div class="feature-icon-box">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <h3 class="card-title">Improve Password Security</h3>
+              <p style="color:var(--text-secondary);font-size:0.92rem;margin-top:0.65rem;">
+                Test credential complexity locally in your browser with zero transmission or storage, and master modern passphrase hygiene.
+              </p>
+            </div>
+            <a href="#password" class="btn btn-secondary btn-sm" style="align-self:flex-start;">
+              Test Password Lab →
+            </a>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       PAGE 2: CYBERSECURITY COMMAND CENTER DASHBOARD (#dashboard)
+       ======================================================================== -->
+  <section id="page-dashboard" class="page-view" aria-label="Cybersecurity Dashboard">
+    <div class="container">
+      <div class="dashboard-shell" id="dashboardShell">
+        <!-- Collapsible Left Sidebar -->
+        <aside class="glass-card dash-sidebar" aria-label="Dashboard Navigation">
+          <div class="dash-sidebar-header">
+            <span class="tech-label dash-sidebar-title" style="color:var(--lavender-neon);">COMMAND MENU</span>
+            <button class="icon-btn" id="toggleSidebarBtn" aria-label="Collapse or Expand Sidebar" title="Toggle Sidebar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+          </div>
+          <a href="#dashboard" class="dash-nav-item active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span class="sidebar-label">Overview</span>
+          </a>
+          <a href="#threats" class="dash-nav-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span class="sidebar-label">Threat Intelligence</span>
+          </a>
+          <a href="#phishing" class="dash-nav-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span class="sidebar-label">Phishing Awareness</span>
+          </a>
+          <a href="#password" class="dash-nav-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span class="sidebar-label">Password Security</span>
+          </a>
+          <a href="#learning" class="dash-nav-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span class="sidebar-label">Learning Center</span>
+          </a>
+          <a href="#news" class="dash-nav-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/></svg>
+            <span class="sidebar-label">Cyber News</span>
+          </a>
+          <button type="button" class="dash-nav-item" id="dashResetDemoBtn" style="margin-top:0.5rem;color:#FCA5A5;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            <span class="sidebar-label">Reset Demo Data</span>
+          </button>
+        </aside>
+
+        <!-- Dashboard Main Content -->
+        <div>
+          <!-- Top Command Header -->
+          <div class="glass-card dash-topbar">
+            <div style="flex:1;min-width:220px;max-width:360px;">
+              <input type="search" id="dashQuickFilterInput" class="cyber-input" placeholder="Jump to threat, lab, or module..." aria-label="Dashboard quick jump" />
+            </div>
+            <div style="display:flex;align-items:center;gap:0.85rem;">
+              <span class="sim-banner"><span class="pulse-dot"></span> SIMULATED EDUCATIONAL TELEMETRY</span>
+              <button class="icon-btn" id="dashNotifBtn" aria-label="Simulated Notifications" title="View Simulated Alerts">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </button>
+              <div style="display:flex;align-items:center;gap:0.6rem;padding:0.35rem 0.75rem;border-radius:12px;background:rgba(168,85,247,0.12);border:1px solid var(--border-purple);">
+                <div style="width:28px;height:28px;border-radius:8px;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.78rem;">CV</div>
+                <div style="line-height:1.2;">
+                  <div style="font-size:0.8rem;font-weight:600;">Cadet Analyst</div>
+                  <div style="font-size:0.68rem;color:var(--lavender-neon);font-family:var(--font-mono);">Demo Mode</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Welcome Banner -->
+          <div style="margin-bottom:1.5rem;">
+            <h1 class="section-title">Welcome to CyberVault.</h1>
+            <p style="color:var(--text-secondary);margin-top:0.35rem;">
+              Your cybersecurity learning and awareness command center. Metrics below combine simulated baseline telemetry with your local learning progress.
+            </p>
+          </div>
+
+          <!-- 4 Metric Cards -->
+          <div class="dash-metrics-grid">
+            <div class="glass-card" style="padding:1.35rem;">
+              <div class="tech-label" style="color:var(--text-secondary);">SECURITY AWARENESS SCORE</div>
+              <div class="stat-value" id="metricAwarenessScore" style="margin-top:0.4rem;">74%</div>
+              <div style="font-size:0.78rem;color:var(--success);">+ Simulated + Quiz Bonus</div>
+            </div>
+            <div class="glass-card" style="padding:1.35rem;">
+              <div class="tech-label" style="color:var(--text-secondary);">LEARNING PROGRESS</div>
+              <div class="stat-value" id="metricLearningProgress" style="margin-top:0.4rem;">0%</div>
+              <div style="font-size:0.78rem;color:var(--lavender-neon);">Local curriculum tracker</div>
+            </div>
+            <div class="glass-card" style="padding:1.35rem;">
+              <div class="tech-label" style="color:var(--text-secondary);">THREAT CATEGORIES</div>
+              <div class="stat-value" style="margin-top:0.4rem;">8</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);">Educational threat profiles</div>
+            </div>
+            <div class="glass-card" style="padding:1.35rem;">
+              <div class="tech-label" style="color:var(--text-secondary);">MODULES COMPLETED</div>
+              <div class="stat-value" id="metricModulesCompleted" style="margin-top:0.4rem;">0 / 8</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);">Pass quizzes to complete</div>
+            </div>
+          </div>
+
+          <!-- Main Dashboard Widgets -->
+          <div class="dash-main-grid">
+            <!-- Threat Category Overview Visualization -->
+            <div class="glass-card" style="padding:1.5rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
+                <div>
+                  <h2 class="card-title">Educational Threat Exposure Index</h2>
+                  <p style="font-size:0.84rem;color:var(--text-secondary);">Illustrative awareness priority distribution (Simulated Data)</p>
+                </div>
+                <span class="badge badge-purple">SIMULATED CHART</span>
+              </div>
+
+              <div class="chart-bars" id="dashboardChartBars">
+                <!-- Populated dynamically by JS -->
+              </div>
+
+              <!-- Rotating Educational Security Tips -->
+              <div style="margin-top:1.75rem;padding:1.15rem;border-radius:14px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.28);">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.45rem;">
+                  <span class="tech-label" style="color:var(--lavender-neon);">💡 SECURITY HYGIENE TIP</span>
+                  <div style="display:flex;gap:0.4rem;">
+                    <button type="button" class="btn btn-ghost btn-sm" id="prevTipBtn" aria-label="Previous Tip">‹</button>
+                    <button type="button" class="btn btn-ghost btn-sm" id="nextTipBtn" aria-label="Next Tip">›</button>
+                  </div>
+                </div>
+                <p id="rotatingTipText" style="font-size:0.92rem;color:#FFFFFF;font-weight:500;">
+                  Enable multi-factor authentication (MFA) on all critical accounts to block automated credential stuffing.
+                </p>
+              </div>
+            </div>
+
+            <!-- Simulated Recent Activity Timeline -->
+            <div class="glass-card" style="padding:1.5rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+                <h2 class="card-title">Recent Activity</h2>
+                <span class="tech-label" style="color:var(--text-muted);">DEMO LOG</span>
+              </div>
+              <div class="activity-list" id="dashboardActivityList">
+                <!-- Populated dynamically by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PAGE 3: THREAT INTELLIGENCE EXPLORER (#threats)
+       ======================================================================== -->
+  <section id="page-threats" class="page-view" aria-label="Threat Intelligence">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem;">
+        <div>
+          <span class="tech-label" style="color:var(--purple-primary);">[ DEFENSIVE THREAT TAXONOMY ]</span>
+          <h1 class="section-title" style="margin-top:0.4rem;">Understand the Threat Landscape.</h1>
+          <p style="color:var(--text-secondary);max-width:680px;margin-top:0.6rem;">
+            Explore common cybersecurity threats, their characteristics, warning indicators, and practical ways to defend against them.
+          </p>
+        </div>
+        <span class="sim-banner">Educational examples — not live threat telemetry</span>
+      </div>
+
+      <!-- Search & Risk Filter Toolbar -->
+      <div class="glass-card filter-toolbar">
+        <div class="filter-pills" id="threatRiskFilters" role="group" aria-label="Filter threats by risk level">
+          <button type="button" class="filter-pill active" data-risk="ALL">All Threats (8)</button>
+          <button type="button" class="filter-pill" data-risk="High Risk">High Risk</button>
+          <button type="button" class="filter-pill" data-risk="Medium Risk">Medium Risk</button>
+          <button type="button" class="filter-pill" data-risk="Low Risk">Low Risk</button>
+        </div>
+        <div style="min-width:260px;flex:1;max-width:340px;">
+          <input type="search" id="threatSearchInput" class="cyber-input" placeholder="Search threats (e.g., Phishing, DDoS)..." aria-label="Search threats" />
+        </div>
+      </div>
+
+      <!-- Threat Cards Grid -->
+      <div class="cards-grid-3" id="threatsGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PAGE 4: PHISHING AWARENESS LAB (#phishing)
+       ======================================================================== -->
+  <section id="page-phishing" class="page-view" aria-label="Phishing Awareness Lab">
+    <div class="container">
+      <div style="text-align:center;max-width:740px;margin:0 auto;">
+        <span class="tech-label" style="color:var(--purple-primary);">[ INTERACTIVE EMAIL INSPECTION SIMULATION ]</span>
+        <h1 class="section-title" style="margin-top:0.4rem;">Can You Spot the Phishing?</h1>
+        <p style="color:var(--text-secondary);margin-top:0.65rem;">
+          Inspect each fictional email scenario carefully—check the sender domain, urgency cues, and destination URL—then classify whether it is suspicious or appears legitimate.
+        </p>
+      </div>
+
+      <div class="glass-card email-simulator-box" id="phishingLabContainer">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PAGE 5: PASSWORD SECURITY LAB (#password)
+       ======================================================================== -->
+  <section id="page-password" class="page-view" aria-label="Password Security Lab">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem;margin-bottom:2rem;">
+        <div>
+          <span class="tech-label" style="color:var(--purple-primary);">[ CLIENT-SIDE CREDENTIAL ANALYZER ]</span>
+          <h1 class="section-title" style="margin-top:0.4rem;">Understand Password Security.</h1>
+          <p style="color:var(--text-secondary);max-width:660px;margin-top:0.6rem;">
+            Test how length, entropy, and character diversity affect password resilience using an interactive local educational estimator.
+          </p>
+        </div>
+        <div class="sim-banner" style="border-color:rgba(34,197,94,0.4);background:rgba(34,197,94,0.1);color:#BBF7D0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Your input is processed locally and is not transmitted or stored.
+        </div>
+      </div>
+
+      <div class="cards-grid-2">
+        <!-- Left: Interactive Password Analyzer -->
+        <div class="glass-card" style="padding:1.75rem;">
+          <label for="passwordTestInput" style="display:block;font-weight:600;margin-bottom:0.6rem;">
+            Enter a Sample Password to Evaluate
+          </label>
+          <div style="position:relative;display:flex;gap:0.5rem;">
+            <input type="password" id="passwordTestInput" class="cyber-input" placeholder="Type a sample password or passphrase..." autocomplete="off" spellcheck="false" />
+            <button type="button" class="btn btn-secondary btn-sm" id="togglePasswordVisBtn" aria-label="Show or Hide Password">
+              Show
+            </button>
+          </div>
+
+          <!-- Strength Bar & Rating -->
+          <div style="margin-top:1.4rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:0.88rem;color:var(--text-secondary);">Estimated Strength:</span>
+              <span id="passwordStrengthLabel" class="badge badge-purple">Awaiting Input</span>
+            </div>
+            <div class="strength-meter-track">
+              <div class="strength-meter-fill" id="passwordStrengthBar"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.78rem;color:var(--text-secondary);">
+              <span>Length: <strong id="passwordLengthCount" style="color:#FFF;">0</strong> chars</span>
+              <span>Illustrative Complexity: <strong id="passwordCrackEst" style="color:var(--lavender-neon);">—</strong></span>
+            </div>
+          </div>
+
+          <!-- Character Variety Indicators -->
+          <div class="criteria-grid" id="passwordCriteriaGrid">
+            <div class="criteria-item" id="crit-length">○ At least 12 characters</div>
+            <div class="criteria-item" id="crit-upper">○ Uppercase letters (A–Z)</div>
+            <div class="criteria-item" id="crit-lower">○ Lowercase letters (a–z)</div>
+            <div class="criteria-item" id="crit-number">○ Numbers (0–9)</div>
+            <div class="criteria-item" id="crit-symbol">○ Special symbols (!@#$...)</div>
+            <div class="criteria-item" id="crit-pattern">○ No common weak pattern</div>
+          </div>
+
+          <!-- Dynamic Recommendations -->
+          <div style="margin-top:1.4rem;padding:1rem;border-radius:12px;background:rgba(16,11,25,0.85);border:1px solid var(--border-purple);">
+            <div class="tech-label" style="color:var(--lavender-neon);margin-bottom:0.4rem;">EDUCATIONAL RECOMMENDATIONS</div>
+            <ul id="passwordAdviceList" style="padding-left:1.2rem;font-size:0.86rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:0.35rem;">
+              <li>Use a passphrase of 4+ unrelated random words (e.g., <em>Violet-Glacier-Orbit-74!</em>).</li>
+              <li>Never reuse passwords across email, banking, and social accounts.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Password Safety Checklist -->
+        <div class="glass-card" style="padding:1.75rem;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <h2 class="card-title">Personal Credential Hygiene Checklist</h2>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.4rem;margin-bottom:1.25rem;">
+              Review these essential account-protection practices to strengthen your everyday digital security posture.
+            </p>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;" id="passwordChecklist">
+              <label class="checklist-item">
+                <input type="checkbox" checked />
+                <div>
+                  <div style="font-weight:600;font-size:0.9rem;">Use a Reputable Password Manager</div>
+                  <div style="font-size:0.8rem;color:var(--text-secondary);">Generate and store unique 16+ character passwords for every service.</div>
+                </div>
+              </label>
+              <label class="checklist-item">
+                <input type="checkbox" />
+                <div>
+                  <div style="font-weight:600;font-size:0.9rem;">Enable Multi-Factor Authentication (MFA)</div>
+                  <div style="font-size:0.8rem;color:var(--text-secondary);">Prefer authenticator apps or hardware security keys over SMS codes.</div>
+                </div>
+              </label>
+              <label class="checklist-item">
+                <input type="checkbox" />
+                <div>
+                  <div style="font-weight:600;font-size:0.9rem;">Avoid Predictable Personal Details</div>
+                  <div style="font-size:0.8rem;color:var(--text-secondary);">Exclude birthdays, pet names, sports teams, and keyboard walks (qwerty).</div>
+                </div>
+              </label>
+              <label class="checklist-item">
+                <input type="checkbox" />
+                <div>
+                  <div style="font-weight:600;font-size:0.9rem;">Store Recovery Backup Codes Offline</div>
+                  <div style="font-size:0.8rem;color:var(--text-secondary);">Keep emergency MFA recovery keys in a secure physical location.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;font-size:0.78rem;color:var(--text-muted);font-family:var(--font-mono);">
+            NOTE: This tool is an educational strength estimator, not a formal cryptographic audit.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PAGE 6: CYBER LEARNING CENTER (#learning)
+       ======================================================================== -->
+  <section id="page-learning" class="page-view" aria-label="Cyber Learning Center">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem;margin-bottom:2rem;">
+        <div>
+          <span class="tech-label" style="color:var(--purple-primary);">[ STRUCTURED SECURITY CURRICULUM ]</span>
+          <h1 class="section-title" style="margin-top:0.4rem;">Learn. Practice. Secure.</h1>
+          <p style="color:var(--text-secondary);max-width:680px;margin-top:0.6rem;">
+            Master foundational cybersecurity domains through bite-sized lessons, real-world scenarios, and interactive knowledge checks. Progress is saved locally in your browser.
+          </p>
+        </div>
+        <button type="button" class="btn btn-ghost" id="resetLearningProgressBtn">
+          Reset Learning Progress
+        </button>
+      </div>
+
+      <div class="cards-grid-3" id="learningModulesGrid">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PAGE 7: CYBER NEWS & INSIGHTS (#news)
+       ======================================================================== -->
+  <section id="page-news" class="page-view" aria-label="Cyber News and Insights">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1rem;">
+        <div>
+          <span class="tech-label" style="color:var(--purple-primary);">[ EDUCATIONAL BRIEFINGS & ANALYSIS ]</span>
+          <h1 class="section-title" style="margin-top:0.4rem;">Stay Ahead of the Digital World.</h1>
+          <p style="color:var(--text-secondary);max-width:680px;margin-top:0.6rem;">
+            Curated educational articles exploring modern digital safety concepts, privacy engineering, and defensive best practices.
+          </p>
+        </div>
+        <span class="sim-banner">Sample educational articles created for CyberVault</span>
+      </div>
+
+      <!-- Category & Search Filter -->
+      <div class="glass-card filter-toolbar">
+        <div class="filter-pills" id="newsCategoryFilters">
+          <button type="button" class="filter-pill active" data-category="ALL">All</button>
+          <button type="button" class="filter-pill" data-category="Cybersecurity">Cybersecurity</button>
+          <button type="button" class="filter-pill" data-category="Data Privacy">Data Privacy</button>
+          <button type="button" class="filter-pill" data-category="AI Security">AI Security</button>
+          <button type="button" class="filter-pill" data-category="Networking">Networking</button>
+          <button type="button" class="filter-pill" data-category="Digital Safety">Digital Safety</button>
+        </div>
+        <div style="min-width:240px;flex:1;max-width:320px;">
+          <input type="search" id="newsSearchInput" class="cyber-input" placeholder="Search articles..." aria-label="Search articles" />
+        </div>
+      </div>
+
+      <div class="cards-grid-3" id="newsGrid">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PAGE 8: ABOUT CYBERVAULT (#about)
+       ======================================================================== -->
+  <section id="page-about" class="page-view" aria-label="About CyberVault">
+    <div class="container">
+      <div style="max-width:780px;">
+        <span class="tech-label" style="color:var(--purple-primary);">[ ABOUT THE PLATFORM ]</span>
+        <h1 class="section-title" style="margin-top:0.4rem;">Making Cybersecurity Easier to Understand.</h1>
+        <p style="color:var(--text-secondary);font-size:1.05rem;margin-top:0.85rem;">
+          CyberVault bridges the gap between complex security engineering and everyday digital awareness—empowering students, developers, and curious minds to navigate the internet safely.
+        </p>
+      </div>
+
+      <!-- Mission & Vision -->
+      <div class="cards-grid-2" style="margin-top:2.25rem;">
+        <div class="glass-card" style="padding:1.85rem;">
+          <span class="badge badge-purple" style="margin-bottom:0.85rem;">OUR MISSION</span>
+          <h2 class="card-title">Accessible Security Intelligence</h2>
+          <p style="color:var(--text-secondary);margin-top:0.65rem;">
+            To make cybersecurity knowledge accessible, understandable, and engaging through interactive education and digital awareness.
+          </p>
+        </div>
+        <div class="glass-card" style="padding:1.85rem;">
+          <span class="badge badge-purple" style="margin-bottom:0.85rem;">OUR VISION</span>
+          <h2 class="card-title">An Informed Digital Community</h2>
+          <p style="color:var(--text-secondary);margin-top:0.65rem;">
+            To encourage a more informed digital community where people understand online risks and make safer technology decisions.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3 Pillar Cards -->
+      <div class="cards-grid-3" style="margin-top:1.75rem;">
+        <div class="glass-card glass-card-hover" style="padding:1.75rem;">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <h3 class="card-title">Awareness</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;">
+            Demystifying social engineering, phishing lures, and privacy pitfalls before they impact everyday users.
+          </p>
+        </div>
+        <div class="glass-card glass-card-hover" style="padding:1.75rem;">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+          <h3 class="card-title">Education</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;">
+            Structured modules, defensive frameworks, and self-paced quizzes built for clarity without jargon overload.
+          </p>
+        </div>
+        <div class="glass-card glass-card-hover" style="padding:1.75rem;">
+          <div class="feature-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+          <h3 class="card-title">Innovation</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;">
+            Combining command-center visual design with safe, browser-local interactive labs that respect user privacy.
+          </p>
+        </div>
+      </div>
+
+      <!-- Illustrated Security Ecosystem Diagram -->
+      <div class="glass-card" style="padding:2rem;margin-top:2rem;text-align:center;">
+        <span class="tech-label" style="color:var(--lavender-neon);">CYBERVAULT LEARNING ECOSYSTEM</span>
+        <h2 class="card-title" style="margin-top:0.4rem;margin-bottom:1.25rem;">How Awareness Connects to Defense</h2>
+        <svg width="100%" height="180" viewBox="0 0 820 180" style="max-width:820px;">
+          <line x1="150" y1="90" x2="670" y2="90" stroke="rgba(168,85,247,0.45)" stroke-width="2" stroke-dasharray="6 6" />
+          <!-- Node 1 -->
+          <rect x="40" y="45" width="180" height="90" rx="16" fill="#1C1529" stroke="#8B5CF6" stroke-width="1.8" />
+          <text x="130" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="15">1. Threat Literacy</text>
+          <text x="130" y="108" text-anchor="middle" fill="#A1A1AA" font-family="Inter, sans-serif" font-size="12">Recognize Risks Early</text>
+          <!-- Node 2 -->
+          <rect x="320" y="45" width="180" height="90" rx="16" fill="#1C1529" stroke="#A855F7" stroke-width="2" />
+          <text x="410" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="15">2. Safe Simulation</text>
+          <text x="410" y="108" text-anchor="middle" fill="#C4B5FD" font-family="Inter, sans-serif" font-size="12">Practice in Zero-Risk Labs</text>
+          <!-- Node 3 -->
+          <rect x="600" y="45" width="180" height="90" rx="16" fill="#1C1529" stroke="#6366F1" stroke-width="1.8" />
+          <text x="690" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="15">3. Digital Resilience</text>
+          <text x="690" y="108" text-anchor="middle" fill="#A1A1AA" font-family="Inter, sans-serif" font-size="12">Apply Daily Safeguards</text>
+        </svg>
+        <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border-purple);color:var(--text-secondary);font-size:0.88rem;">
+          <strong>Project Credits:</strong> Designed and developed as a frontend cybersecurity education project. All telemetry, threat metrics, email labs, and articles are simulated for educational demonstration.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       GLOBAL FOOTER
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1.5rem;">
+        <div>
+          <div class="brand-logo" style="margin-bottom:0.4rem;">
+            <div>CYBER<span>VAULT</span></div>
+          </div>
+          <p style="font-size:0.86rem;color:var(--text-secondary);">
+            Secure. Explore. Understand. — Frontend Cybersecurity Awareness & Education Platform.
+          </p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:1.15rem;font-size:0.86rem;color:var(--text-secondary);">
+          <a href="#home">Home</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#threats">Threats</a>
+          <a href="#phishing">Phishing Lab</a>
+          <a href="#password">Password Lab</a>
+          <a href="#learning">Learning</a>
+          <a href="#news">News</a>
+          <a href="#about">About</a>
+        </div>
+      </div>
+      <div style="margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid rgba(168,85,247,0.12);display:flex;flex-wrap:wrap;justify-content:space-between;gap:0.75rem;font-size:0.78rem;color:var(--text-muted);">
+        <span>© 2026 CyberVault Educational Initiative. Frontend-only demonstration; no live scanning or network interception is performed.</span>
+        <span class="font-mono">STATUS: EDUCATIONAL_SIMULATION_READY</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       UNIVERSAL DETAIL / LEARNING / SEARCH MODAL
+       ======================================================================== -->
+  <div class="modal-backdrop" id="universalModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-dialog">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.1rem;">
+        <div>
+          <span class="tech-label" id="modalSubtitle" style="color:var(--lavender-neon);">DETAIL VIEW</span>
+          <h2 class="card-title" id="modalTitle" style="margin-top:0.25rem;font-size:1.5rem;">Modal Title</h2>
+        </div>
+        <button type="button" class="icon-btn" id="closeModalBtn" aria-label="Close Modal">✕</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container & Back-to-Top -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+  <button type="button" class="back-to-top" id="backToTopBtn" aria-label="Back to top" title="Back to Top">↑</button>
+
+  <!-- ========================================================================
+       APPLICATION JAVASCRIPT (MODULAR ARCHITECTURE IN SINGLE FILE)
+       ======================================================================== -->
+  <script>
+    (() => {
+      "use strict";
+
+      /* ======================================================================
+         1. EDUCATIONAL DATASET (THREATS, PHISHING, LEARNING, NEWS, TIPS)
+         ====================================================================== */
+      const THREATS_DATA = [
+        {
+          id: "phishing",
+          name: "Phishing",
+          category: "Social Engineering & Email",
+          risk: "High Risk",
+          summary: "Deceptive messages impersonating trusted organizations to trick individuals into revealing credentials or financial details.",
+          warningSigns: [
+            "Urgent threats of account suspension or immediate payment demands",
+            "Lookalike sender domains (e.g., support@nex0ra-security.example)",
+            "Generic greetings paired with unexpected login links or attachments"
+          ],
+          defenses: [
+            "Verify sender email headers and navigate directly via official bookmarks",
+            "Enable phishing-resistant Multi-Factor Authentication (MFA)",
+            "Report suspicious messages to your security or IT team"
+          ],
+          overview: "Phishing remains one of the most common initial access vectors. Attackers craft messages that exploit human emotions such as urgency, curiosity, or fear to bypass technical filters."
+        },
+        {
+          id: "malware",
+          name: "Malware",
+          category: "Malicious Software",
+          risk: "High Risk",
+          summary: "Software intentionally designed to disrupt, damage, or gain unauthorized access to devices and user data.",
+          warningSigns: [
+            "Unexpected browser redirects, new toolbars, or disabled security tools",
+            "Unexplained spikes in CPU, memory, or background network activity",
+            "Prompts asking to enable macros in downloaded office documents"
+          ],
+          defenses: [
+            "Keep operating systems, browsers, and applications patched promptly",
+            "Download software exclusively from verified official repositories",
+            "Maintain active endpoint protection and block untrusted script execution"
+          ],
+          overview: "Malware encompasses trojans, spyware, worms, and info-stealers. Modern defensive strategies focus on least-privilege user accounts, application allowlisting, and timely patching."
+        },
+        {
+          id: "ransomware",
+          name: "Ransomware",
+          category: "Extortion & Availability",
+          risk: "High Risk",
+          summary: "Malicious software that encrypts files or locks systems, demanding payment in exchange for a decryption key.",
+          warningSigns: [
+            "Files suddenly renamed with unfamiliar extensions",
+            "Ransom note text files appearing across shared folders",
+            "Suspicious administrative logins occurring outside business hours"
+          ],
+          defenses: [
+            "Follow the 3-2-1 backup rule with offline, immutable backups",
+            "Segment networks so single-device compromises cannot spread laterally",
+            "Enforce MFA on remote access services (VPNs and remote desktop)"
+          ],
+          overview: "Ransomware disrupts operations by rendering critical data inaccessible. Tested offline backups are the single strongest resilience control against extortion."
+        },
+        {
+          id: "social-engineering",
+          name: "Social Engineering",
+          category: "Human Manipulation",
+          risk: "High Risk",
+          summary: "Psychological manipulation techniques used to influence people into divulging confidential information or bypassing procedures.",
+          warningSigns: [
+            "Unsolicited callers claiming to be IT support requesting remote access",
+            "Requests to bypass standard verification steps due to an 'executive emergency'",
+            "Pretexting scenarios referencing public social media details"
+          ],
+          defenses: [
+            "Establish out-of-band verification callbacks using known official numbers",
+            "Cultivate a security culture where questioning unusual requests is praised",
+            "Limit sensitive personal and organizational details shared publicly"
+          ],
+          overview: "Social engineering targets human trust rather than software flaws. Consistent verification workflows neutralize urgency-based manipulation."
+        },
+        {
+          id: "identity-theft",
+          name: "Identity Theft",
+          category: "Personal Data Abuse",
+          risk: "Medium Risk",
+          summary: "Unauthorized acquisition and use of personal identifying information (PII) to commit fraud or open unauthorized accounts.",
+          warningSigns: [
+            "Unrecognized credit inquiries, bills, or account recovery alerts",
+            "Unexpected SIM card deactivation (SIM-swap indicator)",
+            "Notifications of logins from unfamiliar geographic regions"
+          ],
+          defenses: [
+            "Place credit freezes with major bureaus when not actively applying for credit",
+            "Set a carrier-level port-out PIN on your mobile phone account",
+            "Use unique passwords and monitor account statements regularly"
+          ],
+          overview: "Identity theft often stems from exposed PII in data breaches or phishing. Proactive credit freezes and carrier PINs dramatically limit attacker leverage."
+        },
+        {
+          id: "data-breaches",
+          name: "Data Breaches",
+          category: "Information Exposure",
+          risk: "Medium Risk",
+          summary: "Security incidents in which sensitive, protected, or confidential records are accessed or disclosed without authorization.",
+          warningSigns: [
+            "Official breach disclosure notices from online service providers",
+            "Increase in targeted spam referencing specific account details",
+            "Credential stuffing alerts on accounts sharing an older password"
+          ],
+          defenses: [
+            "Use unique passwords per service so one breach cannot cascade",
+            "Minimize data shared with non-essential third-party apps",
+            "Rotate compromised credentials immediately upon breach notification"
+          ],
+          overview: "Even reputable platforms can suffer breaches. Compartmentalizing your digital identity ensures a single compromised database does not endanger other accounts."
+        },
+        {
+          id: "password-attacks",
+          name: "Password Attacks",
+          category: "Authentication Threats",
+          risk: "Medium Risk",
+          summary: "Techniques such as credential stuffing and brute-force guessing aimed at compromising weak or reused passwords.",
+          warningSigns: [
+            "Multiple failed login notifications in rapid succession",
+            "Password reset emails you did not initiate",
+            "Logins from automated cloud IP ranges"
+          ],
+          defenses: [
+            "Adopt long, randomly generated passwords or 4+ word passphrases",
+            "Enable Multi-Factor Authentication (MFA) or Passkeys",
+            "Avoid reusing passwords across any websites"
+          ],
+          overview: "Automated tools test leaked username-password pairs across thousands of sites within minutes. MFA and unique passwords render credential stuffing ineffective."
+        },
+        {
+          id: "ddos",
+          name: "DDoS Attacks",
+          category: "Service Availability",
+          risk: "Low Risk",
+          summary: "Distributed Denial-of-Service floods target servers or networks with overwhelming traffic to disrupt legitimate access.",
+          warningSigns: [
+            "Sudden extreme latency or complete website timeouts",
+            "Abnormally high request volume from distributed sources",
+            "Exhaustion of bandwidth or web server connection pools"
+          ],
+          defenses: [
+            "Deploy Content Delivery Networks (CDNs) and edge traffic scrubbing",
+            "Implement rate limiting and web application firewalls (WAF)",
+            "Design auto-scaling cloud infrastructure for traffic resilience"
+          ],
+          overview: "While individual users rarely experience direct DDoS targeting, understanding availability defenses helps developers architect resilient web applications."
+        }
+      ];
+
+      const PHISHING_SCENARIOS = [
+        {
+          id: 1,
+          senderName: "Nexora Cloud Security Team",
+          senderEmail: "security-alert@nex0ra-verify-login.example",
+          replyTo: "support-desk@mail-redirect-auth.example",
+          timestamp: "Today, 09:42 AM",
+          subject: "URGENT: Your account requires verification within 2 hours",
+          linkPreview: "https://nex0ra-verify-login.example/auth/session-restore?id=8841",
+          body: "Dear Valued Customer,\n\nOur automated system detected an unverified sign-in attempt. Failure to verify your identity within 2 hours will result in permanent suspension of your cloud workspace and files.\n\nClick the verification portal below immediately to confirm your password and recovery code.",
+          isPhishing: true,
+          indicators: [
+            "Typosquatted domain ('nex0ra' with a zero instead of 'nexora')",
+            "Artificial 2-hour countdown designed to induce panic",
+            "Mismatched Reply-To address on an unrelated domain",
+            "Asks you to enter password and recovery code via an email link"
+          ],
+          advice: "Never click urgent account-suspension links. Open a new browser tab and visit the official service domain directly to check account status."
+        },
+        {
+          id: 2,
+          senderName: "Global Tech Rewards Hub",
+          senderEmail: "prizes@claim-device-bonus.example",
+          replyTo: "prizes@claim-device-bonus.example",
+          timestamp: "Yesterday, 04:18 PM",
+          subject: "Congratulations! You won a reward — Claim Your Pro Tablet",
+          linkPreview: "http://claim-device-bonus.example/winner/shipping-fee",
+          body: "CONGRATULATIONS!\n\nYour email address was randomly selected in our annual developer appreciation giveaway! You have won a brand-new Pro Tablet.\n\nTo release your shipment, please confirm your home address and pay a small $4.95 handling fee using your credit card within 24 hours.",
+          isPhishing: true,
+          indicators: [
+            "Unsolicited prize notification for a contest you never entered",
+            "Unencrypted HTTP link requesting credit card details for a 'shipping fee'",
+            "Classic advance-fee lure designed to harvest payment card numbers"
+          ],
+          advice: "Legitimate giveaways do not ask winners for credit card details via unencrypted links to claim a prize."
+        },
+        {
+          id: 3,
+          senderName: "Acme Corp IT Service Desk",
+          senderEmail: "it-notifications@acmecorp.example",
+          replyTo: "it-notifications@acmecorp.example",
+          timestamp: "Today, 11:05 AM",
+          subject: "Scheduled Maintenance Reminder: Intranet Portal (Sunday 02:00 UTC)",
+          linkPreview: "https://status.acmecorp.example/maintenance/2026-q4",
+          body: "Hello Team,\n\nThis is a routine reminder that our internal documentation portal will undergo scheduled database maintenance this Sunday between 02:00 and 04:00 UTC.\n\nNo action is required on your part, and we will never ask for your password via email. You can view live status updates on our official intranet status page.",
+          isPhishing: false,
+          indicators: [
+            "Consistent official domain (@acmecorp.example) across From, Reply-To, and Link",
+            "Uses HTTPS on the organization's verified status subdomain",
+            "No urgent threats, no request for credentials, and clear informational tone"
+          ],
+          advice: "Even with legitimate-looking notices, maintaining the habit of checking status portals via saved bookmarks is great security practice."
+        },
+        {
+          id: 4,
+          senderName: "CloudVault Billing",
+          senderEmail: "billing@cloudvault-invoices.example",
+          replyTo: "accounting@fast-wire-transfer.example",
+          timestamp: "Today, 08:15 AM",
+          subject: "Unusual login notification & Overdue Invoice #INV-9921",
+          linkPreview: "https://cloudvault-invoices.example/download/Invoice_9921.zip",
+          body: "Attention User,\n\nAn unusual login occurred on your billing profile and an overdue invoice of $849.00 has been generated. Download and extract the attached ZIP archive to review the payment receipt or dispute the charge immediately.",
+          isPhishing: true,
+          indicators: [
+            "Combines two unrelated pretexts (unusual login + overdue invoice)",
+            "Prompts downloading a .ZIP archive—a common malware delivery wrapper",
+            "Suspicious Reply-To domain unrelated to the claimed sender"
+          ],
+          advice: "Never download or extract unexpected ZIP attachments from billing emails. Verify invoices inside your authenticated account dashboard."
+        },
+        {
+          id: 5,
+          senderName: "GitForge Security Notifications",
+          senderEmail: "noreply@gitforge.example",
+          replyTo: "noreply@gitforge.example",
+          timestamp: "2 days ago",
+          subject: "New SSH public key added to your account",
+          linkPreview: "https://gitforge.example/settings/keys",
+          body: "Hi @alex-dev,\n\nA new SSH public key (Workstation-Laptop) was recently added to your GitForge account.\n\nIf you added this key, you can safely ignore this message. If you do not recognize this activity, please sign in directly to your GitForge account settings to revoke the key and rotate your credentials.",
+          isPhishing: false,
+          indicators: [
+            "Legitimate domain match (gitforge.example) with HTTPS",
+            "Addresses user by account handle rather than 'Dear Customer'",
+            "Provides clear self-service instructions without demanding credentials in email"
+          ],
+          advice: "Security audit alerts from real platforms inform you of configuration changes and encourage navigating to account settings safely."
+        }
+      ];
+
+      const LEARNING_MODULES = [
+        {
+          id: "fundamentals",
+          title: "Cybersecurity Fundamentals",
+          difficulty: "Beginner",
+          time: "10 mins",
+          description: "Understand the CIA Triad (Confidentiality, Integrity, Availability), risk management, and defense-in-depth principles.",
+          intro: "Cybersecurity is the practice of protecting systems, networks, and data from unauthorized access, disruption, or modification. At its core lies the CIA Triad.",
+          concepts: [
+            "Confidentiality: Ensuring sensitive data is accessible only to authorized individuals (e.g., encryption, access controls).",
+            "Integrity: Guaranteeing data remains accurate and untampered during storage and transit (e.g., cryptographic hashes).",
+            "Availability: Ensuring authorized users can reliably access systems when needed (e.g., backups, redundancy)."
+          ],
+          examples: [
+            "Using full-disk encryption protects confidentiality if a laptop is lost.",
+            "Verifying software checksums ensures file integrity before installation."
+          ],
+          takeaways: [
+            "Security works best in layers (Defense-in-Depth) rather than relying on a single tool.",
+            "Every security decision balances usability, cost, and risk reduction."
+          ],
+          quiz: [
+            {
+              q: "Which pillar of the CIA Triad focuses on preventing unauthorized disclosure of data?",
+              options: ["Availability", "Confidentiality", "Scalability"],
+              answer: 1
+            },
+            {
+              q: "What is 'Defense-in-Depth'?",
+              options: [
+                "Using multiple independent layers of security controls",
+                "Relying solely on a strong firewall",
+                "Disabling all internet access permanently"
+              ],
+              answer: 0
+            }
+          ]
+        },
+        {
+          id: "networking",
+          title: "Networking Basics",
+          difficulty: "Beginner",
+          time: "12 mins",
+          description: "Learn how IP addresses, DNS, HTTPS, TLS encryption, and firewalls govern safe communication across the internet.",
+          intro: "Every online interaction relies on networking protocols. Understanding how data travels helps you spot insecure connections.",
+          concepts: [
+            "DNS (Domain Name System): Translates human-friendly domain names into numeric IP addresses.",
+            "HTTPS & TLS: Encrypts traffic between your browser and a website, preventing eavesdropping on public Wi-Fi.",
+            "Firewalls: Filter incoming and outgoing network traffic based on defined security rules."
+          ],
+          examples: [
+            "Looking for 'https://' and verifying the exact domain name before entering credentials.",
+            "Using a trusted VPN on public airport or café Wi-Fi networks."
+          ],
+          takeaways: [
+            "Unencrypted HTTP traffic can be read or altered on shared local networks.",
+            "DNS spoofing and lookalike domains are primary phishing enablers."
+          ],
+          quiz: [
+            {
+              q: "What protocol encrypts communication between your web browser and a website?",
+              options: ["HTTP", "TLS / HTTPS", "FTP"],
+              answer: 1
+            },
+            {
+              q: "What is the primary role of DNS?",
+              options: [
+                "Translating domain names into IP addresses",
+                "Encrypting local hard drives",
+                "Generating random passwords"
+              ],
+              answer: 0
+            }
+          ]
+        },
+        {
+          id: "web-security",
+          title: "Web Security Fundamentals",
+          difficulty: "Intermediate",
+          time: "15 mins",
+          description: "Explore how modern web applications protect sessions, prevent cross-site scripting (XSS), and validate user inputs.",
+          intro: "Web applications face constant automated probing. Developers protect users by validating inputs and securing browser sessions.",
+          concepts: [
+            "Input Validation & Sanitization: Treating all user-supplied data as untrusted to prevent injection flaws.",
+            "Cross-Site Scripting (XSS) Defense: Escaping untrusted output and using Content Security Policies (CSP).",
+            "Secure Session Cookies: Using HttpOnly, Secure, and SameSite flags to protect login tokens."
+          ],
+          examples: [
+            "Logging out of banking or email sessions on shared computers.",
+            "Keeping web browsers updated to receive rapid sandbox security patches."
+          ],
+          takeaways: [
+            "Browser updates frequently patch critical zero-day rendering vulnerabilities.",
+            "Never trust client-side validation alone in application development."
+          ],
+          quiz: [
+            {
+              q: "Which cookie attribute prevents client-side JavaScript from reading a session cookie?",
+              options: ["HttpOnly", "Max-Age", "Path"],
+              answer: 0
+            },
+            {
+              q: "Why should developers sanitize and escape user input rendered in HTML?",
+              options: [
+                "To reduce image file sizes",
+                "To prevent Cross-Site Scripting (XSS) injection",
+                "To speed up CSS animations"
+              ],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: "digital-privacy",
+          title: "Digital Privacy",
+          difficulty: "Beginner",
+          time: "10 mins",
+          description: "Control your digital footprint, manage app permissions, reduce cross-site tracking, and protect personal data.",
+          intro: "Digital privacy is your ability to control what personal information you share, who can access it, and how it is used.",
+          concepts: [
+            "Data Minimization: Providing only the information strictly required to use a service.",
+            "Tracker & Cookie Hygiene: Blocking third-party tracking cookies and browser fingerprinting.",
+            "Permission Auditing: Regularly reviewing camera, microphone, and location access on mobile devices."
+          ],
+          examples: [
+            "Using email aliases when signing up for newsletters or retail accounts.",
+            "Reviewing social media privacy settings to restrict public visibility of personal milestones."
+          ],
+          takeaways: [
+            "Less exposed personal data directly reduces your vulnerability to targeted phishing and identity theft.",
+            "Privacy settings often reset or expand after major platform updates—audit them periodically."
+          ],
+          quiz: [
+            {
+              q: "What does the principle of 'Data Minimization' recommend?",
+              options: [
+                "Sharing only the minimum personal information necessary",
+                "Using the shortest possible password",
+                "Deleting all system backups"
+              ],
+              answer: 0
+            },
+            {
+              q: "How do email aliases improve digital privacy?",
+              options: [
+                "They conceal your primary email address and reveal which service leaked or shared your address",
+                "They increase internet download speed",
+                "They replace the need for encryption"
+              ],
+              answer: 0
+            }
+          ]
+        },
+        {
+          id: "ethical-hacking",
+          title: "Ethical Hacking Concepts",
+          difficulty: "Intermediate",
+          time: "14 mins",
+          description: "Learn the ethics, authorization rules, and defensive mindset behind authorized penetration testing and bug bounties.",
+          intro: "Ethical hacking involves authorized security professionals evaluating systems—with explicit written permission—to find and fix weaknesses before malicious actors exploit them.",
+          concepts: [
+            "Explicit Authorization: Testing any system without clear written scope and permission is illegal and unethical.",
+            "Vulnerability Assessment vs. Penetration Testing: Identifying potential flaws versus safely validating exploitability within strict rules of engagement.",
+            "Responsible Disclosure: Reporting discovered vulnerabilities privately to vendors so patches can be released safely."
+          ],
+          examples: [
+            "Organizations hosting Bug Bounty programs with well-defined target scopes.",
+            "Practicing security concepts in isolated local virtual machines or authorized training labs."
+          ],
+          takeaways: [
+            "Authorization is the absolute boundary separating security research from unauthorized intrusion.",
+            "The goal of defensive security testing is actionable remediation."
+          ],
+          quiz: [
+            {
+              q: "What is the single most critical requirement before conducting any security test?",
+              options: [
+                "Explicit written authorization and defined scope",
+                "Using dark mode in your terminal",
+                "Testing during weekend hours"
+              ],
+              answer: 0
+            },
+            {
+              q: "What is 'Responsible (Coordinated) Disclosure'?",
+              options: [
+                "Posting exploit code publicly immediately",
+                "Reporting a flaw privately to the organization so they can patch it first",
+                "Selling vulnerability details to unknown brokers"
+              ],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: "cryptography",
+          title: "Cryptography Basics",
+          difficulty: "Intermediate",
+          time: "14 mins",
+          description: "Demystify symmetric encryption, public-key cryptography, cryptographic hashing, and digital signatures.",
+          intro: "Cryptography transforms readable information into protected formats, underpinning everything from messaging apps to software updates.",
+          concepts: [
+            "Symmetric Encryption (e.g., AES): Uses the same secret key to encrypt and decrypt data—fast and ideal for storage.",
+            "Asymmetric / Public-Key Encryption: Uses a mathematically linked public key (to encrypt/verify) and private key (to decrypt/sign).",
+            "Cryptographic Hashing (e.g., SHA-256): One-way mathematical fingerprint used for password storage and integrity checks."
+          ],
+          examples: [
+            "End-to-end encrypted messaging protects conversations so only sender and recipient can read them.",
+            "Websites store salted cryptographic hashes of passwords rather than plaintext."
+          ],
+          takeaways: [
+            "Hashing is one-way; encryption is reversible with the proper key.",
+            "Never invent custom cryptographic algorithms—rely on vetted, peer-reviewed standards."
+          ],
+          quiz: [
+            {
+              q: "How does cryptographic hashing differ from encryption?",
+              options: [
+                "Hashing is a one-way fingerprint; encryption is reversible with a key",
+                "Hashing is only used for images",
+                "Encryption does not use keys"
+              ],
+              answer: 0
+            },
+            {
+              q: "In asymmetric cryptography, which key must always be kept strictly secret?",
+              options: ["The Public Key", "The Private Key", "The Domain Name"],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: "os-security",
+          title: "Operating System Security",
+          difficulty: "Beginner",
+          time: "11 mins",
+          description: "Harden your Windows, macOS, or Linux devices using least privilege, automatic updates, and disk encryption.",
+          intro: "Your operating system is the foundation of your digital workspace. Simple configuration habits dramatically reduce local attack surface.",
+          concepts: [
+            "Principle of Least Privilege: Use a standard user account for daily work rather than running permanently as an administrator.",
+            "Full-Disk Encryption: BitLocker (Windows), FileVault (macOS), or LUKS (Linux) protect data if hardware is stolen.",
+            "Automated Patch Management: Enabling automatic OS security updates closes known vulnerabilities rapidly."
+          ],
+          examples: [
+            "Configuring screen lock timeouts to 2–5 minutes when stepping away from your desk.",
+            "Reviewing startup applications and disabling unused background services."
+          ],
+          takeaways: [
+            "Running as a non-admin user limits what malicious scripts can modify on your system.",
+            "Physical device security (screen locks + disk encryption) is essential for laptops and phones."
+          ],
+          quiz: [
+            {
+              q: "Why should everyday computing be performed using a Standard account instead of an Administrator account?",
+              options: [
+                "It limits the system-wide impact if malware runs accidentally",
+                "It increases battery capacity by 50%",
+                "It disables screen brightness controls"
+              ],
+              answer: 0
+            },
+            {
+              q: "What does full-disk encryption protect against?",
+              options: [
+                "Phishing emails in your inbox",
+                "Unauthorized reading of drive data if a laptop is lost or stolen",
+                "Slow Wi-Fi routers"
+              ],
+              answer: 1
+            }
+          ]
+        },
+        {
+          id: "social-eng-awareness",
+          title: "Social Engineering Awareness",
+          difficulty: "Beginner",
+          time: "10 mins",
+          description: "Recognize pretexting, baiting, tailgating, and emotional triggers used to bypass human judgment.",
+          intro: "Attackers frequently exploit helpfulness, authority, and urgency. Building a pause-and-verify habit is your strongest human firewall.",
+          concepts: [
+            "Urgency & Authority Triggers: Messages claiming 'CEO request' or 'Immediate Account Closure' to rush decisions.",
+            "Pretexting: Fabricating a believable backstory (e.g., fake vendor invoice update) to extract information.",
+            "Out-of-Band Verification: Confirming sensitive requests through a separate, trusted communication channel."
+          ],
+          examples: [
+            "Calling a colleague on an official internal number before acting on an urgent email asking for gift cards or wire changes.",
+            "Refusing to plug unknown USB drives found in public spaces into your computer."
+          ],
+          takeaways: [
+            "Whenever a message triggers strong fear, excitement, or urgency—pause for 30 seconds and verify.",
+            "Healthy skepticism is an essential professional skill."
+          ],
+          quiz: [
+            {
+              q: "What is 'Out-of-Band Verification'?",
+              options: [
+                "Confirming an unusual request using a separate, trusted communication method",
+                "Replying directly to the suspicious email asking if it is real",
+                "Clicking the link in incognito mode"
+              ],
+              answer: 0
+            },
+            {
+              q: "Which psychological trigger is most frequently used in phishing messages?",
+              options: ["Urgency and fear of negative consequences", "Boredom", "Nostalgia"],
+              answer: 0
+            }
+          ]
+        }
+      ];
+
+      const NEWS_ARTICLES = [
+        {
+          id: "passkeys-future",
+          title: "Why Passkeys Are Reshaping Everyday Authentication",
+          category: "Cybersecurity",
+          date: "Sample Educational Briefing • Edition 01",
+          readTime: "4 min read",
+          summary: "Explore how cryptographic passkeys eliminate shared passwords and provide built-in protection against phishing websites.",
+          content: [
+            "Traditional passwords rely on a shared secret known to both you and the server. If a phishing site tricks you into typing that password—or if a server database is breached—your account is exposed.",
+            "Passkeys replace typed passwords with public-key cryptography stored securely on your device and unlocked via biometrics or a local PIN. When you sign in, your device signs a unique cryptographic challenge bound strictly to the legitimate website domain.",
+            "Because the private key never leaves your device and will not sign challenges for lookalike phishing domains, passkeys neutralize credential phishing at a mathematical level."
+          ]
+        },
+        {
+          id: "ai-safety-awareness",
+          title: "Navigating AI-Assisted Social Engineering: What Defenders Should Know",
+          category: "AI Security",
+          date: "Sample Educational Briefing • Edition 02",
+          readTime: "5 min read",
+          summary: "Fluent language alone is no longer a reliable indicator of legitimacy. Learn how verification workflows adapt to modern AI tools.",
+          content: [
+            "Historically, cybersecurity awareness training emphasized looking for spelling mistakes and awkward grammar in suspicious emails. Today, generative language tools allow messages to sound polished and natural.",
+            "As a result, modern digital awareness shifts focus from grammar to verifiable trust signals: sender domain authenticity, out-of-band confirmation for financial or credential requests, and phishing-resistant MFA.",
+            "By establishing clear verification rules—such as never approving sensitive changes solely via email or voice message—individuals and teams stay resilient regardless of how convincing a message sounds."
+          ]
+        },
+        {
+          id: "browser-hygiene",
+          title: "Hardening Your Web Browser: Extensions, Permissions, and Updates",
+          category: "Digital Safety",
+          date: "Sample Educational Briefing • Edition 03",
+          readTime: "4 min read",
+          summary: "Your web browser is your primary gateway to the internet. A few simple configuration habits dramatically improve safety.",
+          content: [
+            "Modern web browsers isolate tabs in secure sandboxes, yet third-party extensions often request broad permissions to read and modify website data.",
+            "Audit your installed browser extensions quarterly: remove extensions you no longer use, prefer open-source or well-vetted publishers, and restrict extension access to 'On Click' where possible.",
+            "Finally, restart your browser promptly when an update badge appears—security patches only take effect after the browser relaunches."
+          ]
+        },
+        {
+          id: "zero-trust-explained",
+          title: "Zero Trust Architecture Explained in Plain Language",
+          category: "Networking",
+          date: "Sample Educational Briefing • Edition 04",
+          readTime: "6 min read",
+          summary: "Understand the shift from 'castle-and-moat' network perimeters to continuous verification of identity and device health.",
+          content: [
+            "Older network designs assumed everything inside a corporate office network was trustworthy while everything outside was untrusted. Cloud computing and remote work dissolved that single perimeter.",
+            "Zero Trust operates on a simple motto: 'Never trust, always verify.' Every access request is evaluated based on verified user identity, device security posture, and least-privilege permissions.",
+            "Even for personal digital life, applying Zero Trust thinking—such as verifying every link and isolating sensitive accounts—builds strong everyday security."
+          ]
+        },
+        {
+          id: "privacy-metadata",
+          title: "Understanding Digital Footprints & Metadata in Everyday Apps",
+          category: "Data Privacy",
+          date: "Sample Educational Briefing • Edition 05",
+          readTime: "5 min read",
+          summary: "Even when message content is encrypted, metadata like timestamps, location tags, and contact graphs tell a story.",
+          content: [
+            "Metadata is 'data about data'—for example, the date, time, camera model, and GPS coordinates embedded inside a smartphone photo (EXIF data).",
+            "Before sharing photos publicly online, review whether your device strips location metadata automatically. Similarly, review app permissions to ensure calculators, flashlights, or simple utilities do not have unnecessary access to contacts or background location.",
+            "Small privacy adjustments compound over time to protect your personal safety and reduce unwanted profiling."
+          ]
+        },
+        {
+          id: "backup-321",
+          title: "The 3-2-1 Backup Strategy: Your Ultimate Safety Net",
+          category: "Cybersecurity",
+          date: "Sample Educational Briefing • Edition 06",
+          readTime: "3 min read",
+          summary: "Hardware failure, accidental deletion, or ransomware can strike anytime. Here is how to ensure your irreplaceable files survive.",
+          content: [
+            "The 3-2-1 backup principle is a timeless resilience standard: keep at least 3 total copies of your important data, stored on 2 different types of storage media, with at least 1 copy kept off-site or offline.",
+            "Why offline or immutable? If an external drive stays permanently plugged into an infected computer, ransomware can encrypt both the main drive and the backup simultaneously.",
+            "Periodically test restoring a sample file from your backup—an untested backup is only an assumption."
+          ]
+        }
+      ];
+
+      const SECURITY_TIPS = [
+        "Enable multi-factor authentication (MFA) on email, banking, and cloud accounts to stop 99% of automated password attacks.",
+        "Avoid clicking links in urgent security alerts—open a new tab and visit the official website via your own bookmarks.",
+        "Use unique, randomly generated passwords or 4+ word passphrases for every single online account.",
+        "Keep operating systems, browsers, and mobile apps updated so critical security patches apply promptly.",
+        "Verify the exact domain name before entering credentials—watch closely for subtle character substitutions."
+      ];
+
+      /* ======================================================================
+         2. APPLICATION STATE & LOCALSTORAGE HELPERS (NON-SENSITIVE ONLY)
+         ====================================================================== */
+      const STORAGE_KEY = "cybervault_edu_progress_v1";
+
+      const defaultState = {
+        completedModules: [],
+        phishingBestScore: 0,
+        activities: [
+          { text: "Initialized CyberVault Command Center (Demo)", time: "Just now" },
+          { text: "Loaded 8 educational threat intelligence profiles", time: "2 mins ago" },
+          { text: "Password Lab local privacy sandbox verified", time: "5 mins ago" },
+          { text: "Reviewed Phishing Awareness curriculum", time: "12 mins ago" }
+        ]
+      };
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return { ...defaultState };
+          const parsed = JSON.parse(raw);
+          return {
+            completedModules: Array.isArray(parsed.completedModules) ? parsed.completedModules : [],
+            phishingBestScore: Number(parsed.phishingBestScore) || 0,
+            activities: Array.isArray(parsed.activities) && parsed.activities.length ? parsed.activities : [...defaultState.activities]
+          };
+        } catch (err) {
+          return { ...defaultState };
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        } catch (err) {
+          // Graceful fallback if storage is restricted
+        }
+      }
+
+      let appState = loadState();
+
+      function logActivity(text) {
+        appState.activities.unshift({ text, time: "Just now" });
+        if (appState.activities.length > 6) appState.activities.pop();
+        saveState();
+        renderDashboard();
+      }
+
+      /* ======================================================================
+         3. TOAST NOTIFICATIONS & UNIVERSAL MODAL SYSTEM
+         ====================================================================== */
+      function showToast(message) {
+        const container = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.innerHTML = `<span class="pulse-dot"></span><span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          toast.style.transform = "translateX(20px)";
+          toast.style.transition = "all 0.25s ease";
+          setTimeout(() => toast.remove(), 260);
+        }, 3200);
+      }
+
+      const modalBackdrop = document.getElementById("universalModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalSubtitle = document.getElementById("modalSubtitle");
+      const modalBody = document.getElementById("modalBody");
+
+      function openModal({ subtitle, title, html }) {
+        modalSubtitle.textContent = subtitle || "CYBERVAULT DETAIL";
+        modalTitle.textContent = title || "";
+        modalBody.innerHTML = html || "";
+        modalBackdrop.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        modalBackdrop.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+      modalBackdrop.addEventListener("click", (e) => {
+        if (e.target === modalBackdrop) closeModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modalBackdrop.classList.contains("open")) closeModal();
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          openGlobalSearch();
+        }
+      });
+
+      /* ======================================================================
+         4. HASH-BASED SPA ROUTING & NAVIGATION
+         ====================================================================== */
+      const VALID_ROUTES = ["home", "dashboard", "threats", "phishing", "password", "learning", "news", "about"];
+
+      function navigateTo(route) {
+        const cleanRoute = VALID_ROUTES.includes(route) ? route : "home";
+        document.querySelectorAll(".page-view").forEach((view) => {
+          view.classList.toggle("active", view.id === `page-${cleanRoute}`);
+        });
+
+        document.querySelectorAll(".nav-link").forEach((link) => {
+          link.classList.toggle("active", link.dataset.route === cleanRoute);
+        });
+
+        // Close mobile drawer if open
+        const mobileDrawer = document.getElementById("mobileDrawer");
+        mobileDrawer.classList.remove("open");
+        mobileDrawer.setAttribute("aria-hidden", "true");
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (cleanRoute === "dashboard") renderDashboard();
+      }
+
+      window.addEventListener("hashchange", () => {
+        const hash = window.location.hash.replace("#", "").trim().toLowerCase();
+        navigateTo(hash || "home");
+      });
+
+      // Mobile drawer controls
+      const mobileDrawer = document.getElementById("mobileDrawer");
+      document.getElementById("openMobileMenuBtn").addEventListener("click", () => {
+        mobileDrawer.classList.add("open");
+        mobileDrawer.setAttribute("aria-hidden", "false");
+      });
+      document.getElementById("closeMobileMenuBtn").addEventListener("click", () => {
+        mobileDrawer.classList.remove("open");
+        mobileDrawer.setAttribute("aria-hidden", "true");
+      });
+      mobileDrawer.addEventListener("click", (e) => {
+        if (e.target === mobileDrawer) {
+          mobileDrawer.classList.remove("open");
+          mobileDrawer.setAttribute("aria-hidden", "true");
+        }
+      });
+
+      /* ======================================================================
+         5. GLOBAL QUICK SEARCH MODAL
+         ====================================================================== */
+      function openGlobalSearch() {
+        openModal({
+          subtitle: "GLOBAL PLATFORM SEARCH",
+          title: "Search Threats, Learning Modules & Articles",
+          html: `
+            <input type="search" id="globalModalSearchInput" class="cyber-input" placeholder="Type keywords (e.g., Ransomware, Passkeys, Cryptography)..." autofocus />
+            <div id="globalSearchResults" style="margin-top:1rem;display:flex;flex-direction:column;gap:0.65rem;max-height:340px;overflow-y:auto;"></div>
+          `
+        });
+
+        const input = document.getElementById("globalModalSearchInput");
+        const resultsBox = document.getElementById("globalSearchResults");
+
+        function renderSearch(q) {
+          const term = q.trim().toLowerCase();
+          const items = [];
+
+          THREATS_DATA.forEach((t) => {
+            if (!term || t.name.toLowerCase().includes(term) || t.summary.toLowerCase().includes(term)) {
+              items.push({ type: "Threat Profile", title: t.name, desc: t.summary, action: () => { closeModal(); window.location.hash = "#threats"; openThreatModal(t.id); } });
+            }
+          });
+          LEARNING_MODULES.forEach((m) => {
+            if (!term || m.title.toLowerCase().includes(term) || m.description.toLowerCase().includes(term)) {
+              items.push({ type: "Learning Module", title: m.title, desc: m.description, action: () => { closeModal(); window.location.hash = "#learning"; openLearningModal(m.id); } });
+            }
+          });
+          NEWS_ARTICLES.forEach((a) => {
+            if (!term || a.title.toLowerCase().includes(term) || a.summary.toLowerCase().includes(term)) {
+              items.push({ type: "Educational Article", title: a.title, desc: a.summary, action: () => { closeModal(); window.location.hash = "#news"; openNewsModal(a.id); } });
+            }
+          });
+
+          if (!items.length) {
+            resultsBox.innerHTML = `<p style="color:var(--text-secondary);font-size:0.9rem;">No matching educational items found.</p>`;
+            return;
+          }
+
+          resultsBox.innerHTML = items.slice(0, 8).map((item, idx) => `
+            <button type="button" data-search-idx="${idx}" style="text-align:left;padding:0.85rem;border-radius:12px;background:rgba(16,11,25,0.85);border:1px solid var(--border-purple);display:block;width:100%;">
+              <div class="tech-label" style="color:var(--lavender-neon);font-size:0.68rem;">${item.type}</div>
+              <div style="font-weight:600;margin:0.15rem 0;">${item.title}</div>
+              <div style="font-size:0.8rem;color:var(--text-secondary);">${item.desc}</div>
+            </button>
+          `).join("");
+
+          resultsBox.querySelectorAll("button[data-search-idx]").forEach((btn) => {
+            btn.addEventListener("click", () => items[Number(btn.dataset.searchIdx)].action());
+          });
+        }
+
+        renderSearch("");
+        input.addEventListener("input", () => renderSearch(input.value));
+        setTimeout(() => input.focus(), 50);
+      }
+
+      document.getElementById("openGlobalSearchBtn").addEventListener("click", openGlobalSearch);
+
+      /* ======================================================================
+         6. DASHBOARD MODULE (METRICS, CHART, TIMELINE, ROTATING TIPS)
+         ====================================================================== */
+      let tipIndex = 0;
+
+      function renderDashboard() {
+        const completedCount = appState.completedModules.length;
+        const totalModules = LEARNING_MODULES.length;
+        const progressPct = Math.round((completedCount / totalModules) * 100);
+        const awarenessScore = Math.min(100, 68 + completedCount * 3 + appState.phishingBestScore * 2);
+
+        document.getElementById("metricAwarenessScore").textContent = `${awarenessScore}%`;
+        document.getElementById("metricLearningProgress").textContent = `${progressPct}%`;
+        document.getElementById("metricModulesCompleted").textContent = `${completedCount} / ${totalModules}`;
+
+        // Simulated Threat Category Bars
+        const chartItems = [
+          { label: "Phishing & Credential Lures", pct: 88 },
+          { label: "Social Engineering Pretexts", pct: 76 },
+          { label: "Malware & Malicious Attachments", pct: 69 },
+          { label: "Ransomware & Backup Resilience", pct: 64 },
+          { label: "Data Breaches & Account Reuse", pct: 72 }
+        ];
+
+        document.getElementById("dashboardChartBars").innerHTML = chartItems.map((item) => `
+          <div>
+            <div class="chart-row-head">
+              <span style="font-weight:500;">${item.label}</span>
+              <span class="font-mono" style="color:var(--lavender-neon);">${item.pct}% Priority</span>
+            </div>
+            <div class="chart-track">
+              <div class="chart-fill" style="width:${item.pct}%;"></div>
+            </div>
+          </div>
+        `).join("");
+
+        // Recent Activity Timeline
+        document.getElementById("dashboardActivityList").innerHTML = appState.activities.map((act) => `
+          <div class="activity-item">
+            <span class="pulse-dot" style="margin-top:6px;"></span>
+            <div>
+              <div style="font-size:0.86rem;color:#FFFFFF;">${act.text}</div>
+              <div style="font-size:0.74rem;color:var(--text-muted);font-family:var(--font-mono);">${act.time}</div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // Sidebar Collapse
+      document.getElementById("toggleSidebarBtn").addEventListener("click", () => {
+        document.getElementById("dashboardShell").classList.toggle("sidebar-collapsed");
+      });
+
+      // Dashboard Quick Jump
+      document.getElementById("dashQuickFilterInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") openGlobalSearch();
+      });
+
+      // Simulated Notifications
+      document.getElementById("dashNotifBtn").addEventListener("click", () => {
+        openModal({
+          subtitle: "SIMULATED COMMAND ALERTS",
+          title: "Educational Awareness Notifications",
+          html: `
+            <div style="display:flex;flex-direction:column;gap:0.8rem;">
+              <div style="padding:1rem;border-radius:12px;background:rgba(16,11,25,0.85);border:1px solid var(--border-purple);">
+                <div class="badge badge-purple" style="margin-bottom:0.4rem;">LAB CHALLENGE</div>
+                <div style="font-weight:600;">Test your inbox instincts in the Phishing Awareness Lab</div>
+                <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:0.25rem;">5 simulated email scenarios await inspection.</p>
+              </div>
+              <div style="padding:1rem;border-radius:12px;background:rgba(16,11,25,0.85);border:1px solid var(--border-purple);">
+                <div class="badge badge-low" style="margin-bottom:0.4rem;">PRIVACY REMINDER</div>
+                <div style="font-weight:600;">Local-Only Password Strength Estimator</div>
+                <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:0.25rem;">Verify passphrase complexity locally with zero data transmission.</p>
+              </div>
+            </div>
+          `
+        });
+      });
+
+      // Rotating Security Tips
+      function updateTipDisplay() {
+        document.getElementById("rotatingTipText").textContent = SECURITY_TIPS[tipIndex];
+      }
+      document.getElementById("nextTipBtn").addEventListener("click", () => {
+        tipIndex = (tipIndex + 1) % SECURITY_TIPS.length;
+        updateTipDisplay();
+      });
+      document.getElementById("prevTipBtn").addEventListener("click", () => {
+        tipIndex = (tipIndex - 1 + SECURITY_TIPS.length) % SECURITY_TIPS.length;
+        updateTipDisplay();
+      });
+      setInterval(() => {
+        tipIndex = (tipIndex + 1) % SECURITY_TIPS.length;
+        updateTipDisplay();
+      }, 9000);
+
+      // Reset Demo Progress
+      function resetAllProgress() {
+        appState = {
+          completedModules: [],
+          phishingBestScore: 0,
+          activities: [{ text: "Reset educational demo progress", time: "Just now" }]
+        };
+        saveState();
+        renderDashboard();
+        renderLearningModules();
+        showToast("Demo learning progress has been reset.");
+      }
+
+      document.getElementById("dashResetDemoBtn").addEventListener("click", resetAllProgress);
+      document.getElementById("resetLearningProgressBtn").addEventListener("click", resetAllProgress);
+
+      /* ======================================================================
+         7. THREAT INTELLIGENCE EXPLORER
+         ====================================================================== */
+      let selectedThreatRisk = "ALL";
+      let threatSearchTerm = "";
+
+      function getRiskBadgeClass(risk) {
+        if (risk === "High Risk") return "badge-high";
+        if (risk === "Medium Risk") return "badge-medium";
+        return "badge-low";
+      }
+
+      function renderThreats() {
+        const grid = document.getElementById("threatsGrid");
+        const filtered = THREATS_DATA.filter((t) => {
+          const matchesRisk = selectedThreatRisk === "ALL" || t.risk === selectedThreatRisk;
+          const q = threatSearchTerm.toLowerCase();
+          const matchesQuery = !q || t.name.toLowerCase().includes(q) || t.category.toLowerCase().includes(q) || t.summary.toLowerCase().includes(q);
+          return matchesRisk && matchesQuery;
+        });
+
+        if (!filtered.length) {
+          grid.innerHTML = `<div class="glass-card" style="padding:2rem;grid-column:1/-1;text-align:center;color:var(--text-secondary);">No threat profiles match your current filter criteria.</div>`;
+          return;
+        }
+
+        grid.innerHTML = filtered.map((t) => `
+          <article class="glass-card glass-card-hover" style="padding:1.65rem;display:flex;flex-direction:column;justify-content:space-between;gap:1.25rem;">
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.85rem;">
+                <span class="tech-label" style="color:var(--text-secondary);font-size:0.7rem;">${t.category}</span>
+                <span class="badge ${getRiskBadgeClass(t.risk)}">${t.risk}</span>
+              </div>
+              <h2 class="card-title">${t.name}</h2>
+              <p style="color:var(--text-secondary);font-size:0.88rem;margin-top:0.55rem;">${t.summary}</p>
+              <div style="margin-top:1rem;padding-top:0.85rem;border-top:1px solid rgba(168,85,247,0.12);font-size:0.82rem;">
+                <div style="color:var(--lavender-neon);font-weight:600;margin-bottom:0.25rem;">Key Warning Sign:</div>
+                <div style="color:var(--text-secondary);">• ${t.warningSigns[0]}</div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" data-threat-id="${t.id}" style="align-self:flex-start;">
+              Learn More →
+            </button>
+          </article>
+        `).join("");
+
+        grid.querySelectorAll("button[data-threat-id]").forEach((btn) => {
+          btn.addEventListener("click", () => openThreatModal(btn.dataset.threatId));
+        });
+      }
+
+      function openThreatModal(id) {
+        const threat = THREATS_DATA.find((item) => item.id === id);
+        if (!threat) return;
+        logActivity(`Inspected Threat Profile: ${threat.name}`);
+        openModal({
+          subtitle: `${threat.category} • EDUCATIONAL PROFILE`,
+          title: `${threat.name} (${threat.risk})`,
+          html: `
+            <p style="color:var(--text-secondary);margin-bottom:1.25rem;">${threat.overview}</p>
+            <div style="padding:1.1rem;border-radius:14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.28);margin-bottom:1rem;">
+              <div class="tech-label" style="color:#FCA5A5;margin-bottom:0.5rem;">COMMON WARNING SIGNS</div>
+              <ul style="padding-left:1.2rem;color:#E4E4E7;font-size:0.9rem;display:flex;flex-direction:column;gap:0.35rem;">
+                ${threat.warningSigns.map((w) => `<li>${w}</li>`).join("")}
+              </ul>
+            </div>
+            <div style="padding:1.1rem;border-radius:14px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.28);">
+              <div class="tech-label" style="color:#86EFAC;margin-bottom:0.5rem;">DEFENSIVE COUNTERMEASURES</div>
+              <ul style="padding-left:1.2rem;color:#E4E4E7;font-size:0.9rem;display:flex;flex-direction:column;gap:0.35rem;">
+                ${threat.defenses.map((d) => `<li>${d}</li>`).join("")}
+              </ul>
+            </div>
+          `
+        });
+      }
+
+      document.getElementById("threatRiskFilters").addEventListener("click", (e) => {
+        const pill = e.target.closest(".filter-pill");
+        if (!pill) return;
+        document.querySelectorAll("#threatRiskFilters .filter-pill").forEach((p) => p.classList.remove("active"));
+        pill.classList.add("active");
+        selectedThreatRisk = pill.dataset.risk;
+        renderThreats();
+      });
+
+      document.getElementById("threatSearchInput").addEventListener("input", (e) => {
+        threatSearchTerm = e.target.value;
+        renderThreats();
+      });
+
+      /* ======================================================================
+         8. PHISHING AWARENESS LAB (INTERACTIVE EMAIL CLASSIFIER)
+         ====================================================================== */
+      let phishingIndex = 0;
+      let phishingScore = 0;
+      let phishingAnswered = false;
+
+      function renderPhishingLab() {
+        const container = document.getElementById("phishingLabContainer");
+
+        if (phishingIndex >= PHISHING_SCENARIOS.length) {
+          if (phishingScore > appState.phishingBestScore) {
+            appState.phishingBestScore = phishingScore;
+            saveState();
+          }
+          logActivity(`Completed Phishing Awareness Lab (${phishingScore}/${PHISHING_SCENARIOS.length})`);
+          container.innerHTML = `
+            <div style="padding:2.5rem 1.75rem;text-align:center;">
+              <span class="badge badge-purple" style="margin-bottom:0.85rem;">LAB SIMULATION COMPLETE</span>
+              <h2 class="section-title">Your Detection Score: ${phishingScore} / ${PHISHING_SCENARIOS.length}</h2>
+              <p style="color:var(--text-secondary);max-width:540px;margin:0.75rem auto 1.75rem;">
+                ${phishingScore === PHISHING_SCENARIOS.length
+                  ? "Outstanding work! You accurately identified every phishing indicator and legitimate message."
+                  : "Great practice! Always double-check sender domains, Reply-To headers, and urgent requests before clicking links."}
+              </p>
+              <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+                <button type="button" class="btn btn-primary" id="restartPhishingBtn">Restart Phishing Lab</button>
+                <a href="#dashboard" class="btn btn-secondary">View Updated Dashboard</a>
+              </div>
+            </div>
+          `;
+          document.getElementById("restartPhishingBtn").addEventListener("click", () => {
+            phishingIndex = 0;
+            phishingScore = 0;
+            phishingAnswered = false;
+            renderPhishingLab();
+          });
+          return;
+        }
+
+        const scenario = PHISHING_SCENARIOS[phishingIndex];
+        container.innerHTML = `
+          <div class="email-header-bar">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+              <span class="badge badge-purple">SCENARIO ${phishingIndex + 1} OF ${PHISHING_SCENARIOS.length}</span>
+              <span class="font-mono" style="font-size:0.8rem;color:var(--lavender-neon);">Current Score: ${phishingScore}</span>
+            </div>
+            <h2 class="card-title" style="margin-top:0.85rem;">Subject: ${scenario.subject}</h2>
+            <div class="email-meta-grid">
+              <span style="color:var(--text-muted);">From:</span>
+              <span><strong>${scenario.senderName}</strong> &lt;<span class="font-mono" style="color:var(--lavender-neon);font-size:0.82rem;">${scenario.senderEmail}</span>&gt;</span>
+              <span style="color:var(--text-muted);">Reply-To:</span>
+              <span class="font-mono" style="font-size:0.82rem;color:var(--text-secondary);">${scenario.replyTo}</span>
+              <span style="color:var(--text-muted);">Received:</span>
+              <span style="color:var(--text-secondary);">${scenario.timestamp}</span>
+            </div>
+          </div>
+
+          <div class="email-body-area">
+            <p style="white-space:pre-line;">${scenario.body}</p>
+            <div class="simulated-link-preview" title="Simulated Link Destination">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              <span>Simulated Link Target: ${scenario.linkPreview}</span>
+            </div>
+
+            <div style="margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:0.85rem;" id="phishingActionBtns">
+              <button type="button" class="btn btn-primary" id="classifySuspiciousBtn" style="background:linear-gradient(135deg,#DC2626,#EF4444);">
+                ⚠ Suspicious (Phishing)
+              </button>
+              <button type="button" class="btn btn-secondary" id="classifyLegitBtn">
+                ✓ Appears Legitimate
+              </button>
+            </div>
+
+            <div id="phishingFeedbackSlot"></div>
+          </div>
+        `;
+
+        document.getElementById("classifySuspiciousBtn").addEventListener("click", () => handlePhishingGuess(true));
+        document.getElementById("classifyLegitBtn").addEventListener("click", () => handlePhishingGuess(false));
+      }
+
+      function handlePhishingGuess(userSaidSuspicious) {
+        if (phishingAnswered) return;
+        phishingAnswered = true;
+        const scenario = PHISHING_SCENARIOS[phishingIndex];
+        const isCorrect = userSaidSuspicious === scenario.isPhishing;
+        if (isCorrect) phishingScore++;
+
+        document.getElementById("classifySuspiciousBtn").disabled = true;
+        document.getElementById("classifyLegitBtn").disabled = true;
+
+        const feedbackSlot = document.getElementById("phishingFeedbackSlot");
+        feedbackSlot.innerHTML = `
+          <div class="phishing-feedback-box">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.65rem;">
+              <span class="badge ${isCorrect ? "badge-low" : "badge-high"}">
+                ${isCorrect ? "✓ CORRECT CLASSIFICATION" : "✕ INCORRECT CLASSIFICATION"}
+              </span>
+              <span class="tech-label" style="color:var(--lavender-neon);">
+                ACTUAL: ${scenario.isPhishing ? "SUSPICIOUS PHISHING SIMULATION" : "LEGITIMATE NOTIFICATION EXAMPLE"}
+              </span>
+            </div>
+            <div style="font-weight:600;margin-bottom:0.4rem;">Key Inspection Indicators:</div>
+            <ul style="padding-left:1.2rem;font-size:0.88rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0.85rem;">
+              ${scenario.indicators.map((ind) => `<li>${ind}</li>`).join("")}
+            </ul>
+            <p style="font-size:0.88rem;color:#FFFFFF;margin-bottom:1.1rem;"><strong>Safety Takeaway:</strong> ${scenario.advice}</p>
+            <button type="button" class="btn btn-primary btn-sm" id="nextPhishingScenarioBtn">
+              ${phishingIndex + 1 < PHISHING_SCENARIOS.length ? "Next Email Scenario →" : "See Final Lab Score →"}
+            </button>
+          </div>
+        `;
+
+        document.getElementById("nextPhishingScenarioBtn").addEventListener("click", () => {
+          phishingIndex++;
+          phishingAnswered = false;
+          renderPhishingLab();
+        });
+      }
+
+      /* ======================================================================
+         9. PASSWORD SECURITY LAB (100% LOCAL, ZERO STORAGE/TRANSMISSION)
+         ====================================================================== */
+      const passwordInput = document.getElementById("passwordTestInput");
+      const toggleVisBtn = document.getElementById("togglePasswordVisBtn");
+
+      toggleVisBtn.addEventListener("click", () => {
+        const isHidden = passwordInput.type === "password";
+        passwordInput.type = isHidden ? "text" : "password";
+        toggleVisBtn.textContent = isHidden ? "Hide" : "Show";
+      });
+
+      function evaluatePasswordLocally(pwd) {
+        const len = pwd.length;
+        const hasUpper = /[A-Z]/.test(pwd);
+        const hasLower = /[a-z]/.test(pwd);
+        const hasNumber = /[0-9]/.test(pwd);
+        const hasSymbol = /[^A-Za-z0-9]/.test(pwd);
+        const commonWeak = /(password|123456|qwerty|admin|letmein|welcome|iloveyou|111111|abc123)/i.test(pwd);
+
+        document.getElementById("passwordLengthCount").textContent = String(len);
+
+        const setCrit = (id, met, label) => {
+          const el = document.getElementById(id);
+          el.classList.toggle("met", met);
+          el.textContent = `${met ? "✓" : "○"} ${label}`;
+        };
+
+        setCrit("crit-length", len >= 12, "At least 12 characters");
+        setCrit("crit-upper", hasUpper, "Uppercase letters (A–Z)");
+        setCrit("crit-lower", hasLower, "Lowercase letters (a–z)");
+        setCrit("crit-number", hasNumber, "Numbers (0–9)");
+        setCrit("crit-symbol", hasSymbol, "Special symbols (!@#$...)");
+        setCrit("crit-pattern", len > 0 && !commonWeak, "No common weak pattern");
+
+        const bar = document.getElementById("passwordStrengthBar");
+        const label = document.getElementById("passwordStrengthLabel");
+        const crackEst = document.getElementById("passwordCrackEst");
+        const adviceList = document.getElementById("passwordAdviceList");
+
+        if (len === 0) {
+          bar.style.width = "0%";
+          label.textContent = "Awaiting Input";
+          label.className = "badge badge-purple";
+          crackEst.textContent = "—";
+          return;
+        }
+
+        let score = 0;
+        if (len >= 8) score++;
+        if (len >= 12) score++;
+        if (len >= 16) score++;
+        if (hasUpper && hasLower) score++;
+        if (hasNumber) score++;
+        if (hasSymbol) score++;
+        if (commonWeak) score = Math.max(1, score - 3);
+
+        const levels = [
+          { max: 1, name: "Very Weak", pct: "18%", color: "#EF4444", cls: "badge-high", est: "Instant (Educational)" },
+          { max: 2, name: "Weak", pct: "36%", color: "#F97316", cls: "badge-high", est: "Minutes to Hours" },
+          { max: 3, name: "Moderate", pct: "58%", color: "#F59E0B", cls: "badge-medium", est: "Days to Months" },
+          { max: 5, name: "Strong", pct: "82%", color: "#22C55E", cls: "badge-low", est: "Decades (Illustrative)" },
+          { max: 6, name: "Very Strong", pct: "100%", color: "#A855F7", cls: "badge-purple", est: "Centuries+ (Illustrative)" }
+        ];
+
+        const rating = levels.find((l) => score <= l.max) || levels[levels.length - 1];
+        bar.style.width = rating.pct;
+        bar.style.backgroundColor = rating.color;
+        label.textContent = rating.name;
+        label.className = `badge ${rating.cls}`;
+        crackEst.textContent = rating.est;
+
+        const tips = [];
+        if (commonWeak) tips.push("Avoid dictionary words or predictable keyboard sequences like '123456' or 'password'.");
+        if (len < 12) tips.push("Increase length to at least 12–16 characters—length multiplies brute-force resistance.");
+        if (!hasUpper || !hasLower) tips.push("Mix both uppercase and lowercase letters.");
+        if (!hasNumber) tips.push("Include unpredictable digits not tied to birth years.");
+        if (!hasSymbol) tips.push("Add punctuation or special symbols between words.");
+        if (!tips.length) tips.push("Excellent complexity! Store this uniquely in a password manager and pair with MFA.");
+
+        adviceList.innerHTML = tips.map((t) => `<li>${t}</li>`).join("");
+      }
+
+      passwordInput.addEventListener("input", () => evaluatePasswordLocally(passwordInput.value));
+
+      /* ======================================================================
+         10. CYBER LEARNING CENTER & INTERACTIVE QUIZZES
+         ====================================================================== */
+      function renderLearningModules() {
+        const grid = document.getElementById("learningModulesGrid");
+        grid.innerHTML = LEARNING_MODULES.map((mod) => {
+          const isCompleted = appState.completedModules.includes(mod.id);
+          return `
+            <article class="glass-card glass-card-hover" style="padding:1.65rem;display:flex;flex-direction:column;justify-content:space-between;gap:1.25rem;">
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;margin-bottom:0.8rem;">
+                  <span class="badge ${mod.difficulty === "Beginner" ? "badge-low" : "badge-purple"}">${mod.difficulty}</span>
+                  <span class="font-mono" style="font-size:0.76rem;color:var(--text-secondary);">⏱ ${mod.time}</span>
+                </div>
+                <h2 class="card-title">${mod.title}</h2>
+                <p style="color:var(--text-secondary);font-size:0.88rem;margin-top:0.55rem;">${mod.description}</p>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.76rem;font-family:var(--font-mono);margin-bottom:0.35rem;">
+                  <span style="color:${isCompleted ? "var(--success)" : "var(--text-muted)"};">${isCompleted ? "✓ COMPLETED" : "NOT STARTED"}</span>
+                  <span>${isCompleted ? "100%" : "0%"}</span>
+                </div>
+                <div class="chart-track" style="height:6px;margin-bottom:1rem;">
+                  <div class="chart-fill" style="width:${isCompleted ? "100%" : "0%"};"></div>
+                </div>
+                <button type="button" class="btn ${isCompleted ? "btn-secondary" : "btn-primary"} btn-sm" data-module-id="${mod.id}">
+                  ${isCompleted ? "Review Module" : "Start Learning →"}
+                </button>
+              </div>
+            </article>
+          `;
+        }).join("");
+
+        grid.querySelectorAll("button[data-module-id]").forEach((btn) => {
+          btn.addEventListener("click", () => openLearningModal(btn.dataset.moduleId));
+        });
+      }
+
+      function openLearningModal(id) {
+        const mod = LEARNING_MODULES.find((m) => m.id === id);
+        if (!mod) return;
+
+        openModal({
+          subtitle: `${mod.difficulty.toUpperCase()} MODULE • ${mod.time.toUpperCase()}`,
+          title: mod.title,
+          html: `
+            <div style="display:flex;flex-direction:column;gap:1.15rem;">
+              <div>
+                <div class="tech-label" style="color:var(--lavender-neon);margin-bottom:0.35rem;">1. INTRODUCTION</div>
+                <p style="color:var(--text-secondary);font-size:0.93rem;">${mod.intro}</p>
+              </div>
+
+              <div style="padding:1rem;border-radius:14px;background:rgba(16,11,25,0.85);border:1px solid var(--border-purple);">
+                <div class="tech-label" style="color:var(--lavender-neon);margin-bottom:0.45rem;">2. KEY CONCEPTS</div>
+                <ul style="padding-left:1.2rem;font-size:0.88rem;color:#E4E4E7;display:flex;flex-direction:column;gap:0.4rem;">
+                  ${mod.concepts.map((c) => `<li>${c}</li>`).join("")}
+                </ul>
+              </div>
+
+              <div>
+                <div class="tech-label" style="color:var(--lavender-neon);margin-bottom:0.35rem;">3. PRACTICAL EVERYDAY EXAMPLES</div>
+                <ul style="padding-left:1.2rem;font-size:0.88rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:0.35rem;">
+                  ${mod.examples.map((ex) => `<li>${ex}</li>`).join("")}
+                </ul>
+              </div>
+
+              <div style="padding:1rem;border-radius:14px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);">
+                <div class="tech-label" style="color:#FFFFFF;margin-bottom:0.35rem;">4. IMPORTANT TAKEAWAYS</div>
+                <ul style="padding-left:1.2rem;font-size:0.88rem;color:#E4E4E7;display:flex;flex-direction:column;gap:0.3rem;">
+                  ${mod.takeaways.map((tk) => `<li>${tk}</li>`).join("")}
+                </ul>
+              </div>
+
+              <!-- Knowledge Check Quiz -->
+              <div style="padding:1.2rem;border-radius:14px;background:rgba(28,21,41,0.95);border:1px solid var(--border-purple-strong);">
+                <div class="tech-label" style="color:var(--lavender-neon);margin-bottom:0.65rem;">5. KNOWLEDGE CHECK QUIZ</div>
+                ${mod.quiz.map((qItem, qIdx) => `
+                  <div style="margin-bottom:1rem;">
+                    <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.45rem;">Q${qIdx + 1}: ${qItem.q}</div>
+                    <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                      ${qItem.options.map((opt, optIdx) => `
+                        <label style="display:flex;align-items:center;gap:0.55rem;font-size:0.86rem;color:var(--text-secondary);cursor:pointer;">
+                          <input type="radio" name="quiz_${mod.id}_${qIdx}" value="${optIdx}" style="accent-color:var(--purple-primary);" />
+                          <span>${opt}</span>
+                        </label>
+                      `).join("")}
+                    </div>
+                  </div>
+                `).join("")}
+                <button type="button" class="btn btn-primary btn-sm" id="submitModuleQuizBtn">Submit Quiz & Complete Module</button>
+                <div id="moduleQuizResult" style="margin-top:0.75rem;font-size:0.88rem;"></div>
+              </div>
+            </div>
+          `
+        });
+
+        document.getElementById("submitModuleQuizBtn").addEventListener("click", () => {
+          let correct = 0;
+          mod.quiz.forEach((qItem, qIdx) => {
+            const checked = document.querySelector(`input[name="quiz_${mod.id}_${qIdx}"]:checked`);
+            if (checked && Number(checked.value) === qItem.answer) correct++;
+          });
+
+          const resEl = document.getElementById("moduleQuizResult");
+          if (correct === mod.quiz.length) {
+            if (!appState.completedModules.includes(mod.id)) {
+              appState.completedModules.push(mod.id);
+              saveState();
+              logActivity(`Completed Learning Module: ${mod.title}`);
+            }
+            renderLearningModules();
+            renderDashboard();
+            resEl.innerHTML = `<span style="color:var(--success);font-weight:600;">✓ Passed (${correct}/${mod.quiz.length})! Module marked as completed.</span>`;
+            showToast(`Completed: ${mod.title}`);
+          } else {
+            resEl.innerHTML = `<span style="color:var(--warning);font-weight:600;">Score: ${correct}/${mod.quiz.length}. Review the key concepts above and try again!</span>`;
+          }
+        });
+      }
+
+      /* ======================================================================
+         11. CYBER NEWS & EDUCATIONAL INSIGHTS
+         ====================================================================== */
+      let selectedNewsCategory = "ALL";
+      let newsSearchTerm = "";
+
+      function renderNews() {
+        const grid = document.getElementById("newsGrid");
+        const filtered = NEWS_ARTICLES.filter((art) => {
+          const catMatch = selectedNewsCategory === "ALL" || art.category === selectedNewsCategory;
+          const q = newsSearchTerm.toLowerCase();
+          const searchMatch = !q || art.title.toLowerCase().includes(q) || art.summary.toLowerCase().includes(q);
+          return catMatch && searchMatch;
+        });
+
+        if (!filtered.length) {
+          grid.innerHTML = `<div class="glass-card" style="padding:2rem;grid-column:1/-1;text-align:center;color:var(--text-secondary);">No sample educational articles match your filter.</div>`;
+          return;
+        }
+
+        grid.innerHTML = filtered.map((art) => `
+          <article class="glass-card glass-card-hover" style="overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <!-- Abstract Cyber Header Banner -->
+              <div style="height:110px;background:linear-gradient(135deg, rgba(139,92,246,0.28), rgba(16,11,25,0.95));border-bottom:1px solid var(--border-purple);padding:1rem 1.25rem;display:flex;flex-direction:column;justify-content:space-between;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="badge badge-purple">${art.category}</span>
+                  <span class="font-mono" style="font-size:0.74rem;color:var(--text-secondary);">${art.readTime}</span>
+                </div>
+                <div class="font-mono" style="font-size:0.7rem;color:var(--lavender-neon);">${art.date}</div>
+              </div>
+              <div style="padding:1.4rem;">
+                <h2 class="card-title">${art.title}</h2>
+                <p style="color:var(--text-secondary);font-size:0.88rem;margin-top:0.6rem;">${art.summary}</p>
+              </div>
+            </div>
+            <div style="padding:0 1.4rem 1.4rem;">
+              <button type="button" class="btn btn-secondary btn-sm" data-news-id="${art.id}">
+                Read Article →
+              </button>
+            </div>
+          </article>
+        `).join("");
+
+        grid.querySelectorAll("button[data-news-id]").forEach((btn) => {
+          btn.addEventListener("click", () => openNewsModal(btn.dataset.newsId));
+        });
+      }
+
+      function openNewsModal(id) {
+        const art = NEWS_ARTICLES.find((a) => a.id === id);
+        if (!art) return;
+        logActivity(`Read Educational Article: ${art.title}`);
+        openModal({
+          subtitle: `${art.category.toUpperCase()} • ${art.readTime.toUpperCase()}`,
+          title: art.title,
+          html: `
+            <div class="sim-banner" style="margin-bottom:1.1rem;">${art.date}</div>
+            <div style="display:flex;flex-direction:column;gap:0.95rem;color:#E4E4E7;font-size:0.95rem;line-height:1.75;">
+              ${art.content.map((p) => `<p>${p}</p>`).join("")}
+            </div>
+          `
+        });
+      }
+
+      document.getElementById("newsCategoryFilters").addEventListener("click", (e) => {
+        const pill = e.target.closest(".filter-pill");
+        if (!pill) return;
+        document.querySelectorAll("#newsCategoryFilters .filter-pill").forEach((p) => p.classList.remove("active"));
+        pill.classList.add("active");
+        selectedNewsCategory = pill.dataset.category;
+        renderNews();
+      });
+
+      document.getElementById("newsSearchInput").addEventListener("input", (e) => {
+        newsSearchTerm = e.target.value;
+        renderNews();
+      });
+
+      /* ======================================================================
+         12. BACK-TO-TOP & INTERSECTION OBSERVER SCROLL REVEAL
+         ====================================================================== */
+      const backToTopBtn = document.getElementById("backToTopBtn");
+      window.addEventListener("scroll", () => {
+        backToTopBtn.classList.toggle("visible", window.scrollY > 360);
+      }, { passive: true });
+
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+      /* ======================================================================
+         13. INITIALIZE ALL VIEWS ON LOAD
+         ====================================================================== */
+      renderDashboard();
+      renderThreats();
+      renderPhishingLab();
+      renderLearningModules();
+      renderNews();
+
+      const initialRoute = window.location.hash.replace("#", "").trim().toLowerCase();
+      navigateTo(initialRoute || "home");
+    })();
+  </script>
+</body>
+</html>
